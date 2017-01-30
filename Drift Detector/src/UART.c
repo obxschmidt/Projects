@@ -8,17 +8,6 @@ int fsm_isr_counter = SENTENCE_START;
 int sentence_type_counter = 0;
 //extern int sentence_buffer_size; // used for testing
 
-/* BEGIN - UART0 Device Driver
-
-	Code created by Shannon Strutz
-	Date : 5/7/2014
-	Licensed under CC BY-NC-SA 3.0
-	http://creativecommons.org/licenses/by-nc-sa/3.0/
-
-	Modified by Alex Dean 9/13/2016
-	
-*/
-
 struct __FILE
 {
   int handle;
@@ -83,16 +72,6 @@ void Init_UART0(uint32_t baud_rate) {
 	Q_Init(&TxQ);
 	Q_Init(&RxQ);
 }
-
-/* END - UART0 Device Driver 
-	Code created by Shannon Strutz
-	Date : 5/7/2014
-	Licensed under CC BY-NC-SA 3.0
-	http://creativecommons.org/licenses/by-nc-sa/3.0/
-
-	Modified by Alex Dean 9/13/2016
-	
-*/
 
 void Init_UART2(uint32_t baud_rate) {
 	uint32_t divisor;
@@ -300,4 +279,4 @@ uint32_t Get_Num_Rx_Chars_Available(void) {
 uint8_t	Get_Char(void) {
 	return Q_Dequeue(&RxQ);
 }
-// *******************************ARM University Program Copyright © ARM Ltd 2013*************************************   
+// *******************************ARM University Program Copyright Â© ARM Ltd 2013*************************************   
