@@ -1,0 +1,353 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V6.40.1.950/W32 for MSP430           20/Apr/2016  15:43:38
+# Copyright 1996-2015 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.40
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\iot.c
+#    Command line  =  
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\iot.c -lC
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\Debug\List -o
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\Debug\Obj --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5739__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 7.3\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large
+#    List file     =  
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\Debug\List\iot.lst
+#    Object file   =  
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\Debug\Obj\iot.r43
+#
+###############################################################################
+
+C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\iot.c
+      1          //------------------------------------------------------------------------------
+      2          //
+      3          //  Description: This file contains the code related to the IOT device
+      4          //
+      5          //
+      6          //  Calvin Schmidt
+      7          //  Feb 2016
+      8          //  Built with IAR Embedded Workbench Version: V7.3.1.3987 (6.40.1)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x322
+   \   union <unnamed> _A_PJOUT_L
+   \                     _A_PJOUT_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5ce
+   \   union <unnamed> _A_UCA0TXBUF_L
+   \                     _A_UCA0TXBUF_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5dc
+   \   union <unnamed> _A_UCA0IFG_L
+   \                     _A_UCA0IFG_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5ee
+   \   union <unnamed> _A_UCA1TXBUF_L
+   \                     _A_UCA1TXBUF_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5fa
+   \   union <unnamed> _A_UCA1IE_L
+   \                     _A_UCA1IE_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x5fc
+   \   union <unnamed> _A_UCA1IFG_L
+   \                     _A_UCA1IFG_L:
+   \   000000                DS8 2
+     12          #include  "functions.h"
+     13          #include  "macros.h"
+     14          
+     15          extern int usb_rx_ring_wr;
+     16          extern int usb_rx_ring_rd;
+     17          extern int usb_tx_ring_wr;
+     18          extern int usb_tx_ring_rd;
+     19          extern char USB_Char_Tx[SMALL_RING_SIZE];
+     20          extern char USB_Char_Rx[SMALL_RING_SIZE];
+     21          extern char message[SMALL_RING_SIZE];
+     22          extern char IOT_Char_Tx[SMALL_RING_SIZE];
+     23          extern char IOT_Char_Rx[SMALL_RING_SIZE];
+     24          extern int iot_tx_ring_wr;
+     25          extern int iot_rx_ring_wr;
+     26          extern int iot_tx_ring_rd;
+     27          extern int iot_rx_ring_rd;
+     28          extern int iot_length;
+     29          extern char iot_command[IOT_LENGTH];
+     30          extern char car_command[HUNDRED];
+     31          
+
+   \                                 In  segment CODE, align 2
+     32          void Write_USB(char character){
+   \                     Write_USB:
+   \                     ??Write_USB_0:
+     33            while(!(UCA0IFG & UCTXIFG));
+   \   000000   A2B3DC05     BIT.W   #0x2, &0x5dc
+   \   000004   FD2B         JNC     ??Write_USB_0
+     34            UCA0TXBUF = character;
+   \   000006   4C4C         MOV.B   R12, R12
+   \   000008   824CCE05     MOV.W   R12, &0x5ce
+     35          }
+   \   00000C   1001         RETA
+   \   00000E                REQUIRE _A_UCA0IFG_L
+   \   00000E                REQUIRE _A_UCA0TXBUF_L
+     36          
+
+   \                                 In  segment CODE, align 2
+     37          void Write_IOT(char character){
+   \                     Write_IOT:
+   \                     ??Write_IOT_0:
+     38            while(!(UCA1IFG & UCTXIFG));
+   \   000000   A2B3FC05     BIT.W   #0x2, &0x5fc
+   \   000004   FD2B         JNC     ??Write_IOT_0
+     39            UCA1IE |= UCTXIE;
+   \   000006   A2D3FA05     BIS.W   #0x2, &0x5fa
+     40            UCA1TXBUF = character;
+   \   00000A   4C4C         MOV.B   R12, R12
+   \   00000C   824CEE05     MOV.W   R12, &0x5ee
+     41          }
+   \   000010   1001         RETA
+   \   000012                REQUIRE _A_UCA1IFG_L
+   \   000012                REQUIRE _A_UCA1IE_L
+   \   000012                REQUIRE _A_UCA1TXBUF_L
+     42          
+
+   \                                 In  segment CODE, align 2
+     43          void Read_USB(void){
+   \                     Read_USB:
+   \                     ??Read_USB_0:
+     44            while (usb_rx_ring_rd != usb_rx_ring_wr){
+   \   000000   9292........ CMP.W   &usb_rx_ring_wr, &usb_rx_ring_rd
+   \   000006   0F24         JEQ     ??Read_USB_1
+     45              Write_IOT(USB_Char_Rx[usb_rx_ring_rd]);
+   \   000008   1F42....     MOV.W   &usb_rx_ring_rd, R15
+   \   00000C   5C4F....     MOV.B   USB_Char_Rx(R15), R12
+   \   000010   ........     CALLA   #Write_IOT
+     46              usb_rx_ring_rd++;
+   \   000014   9253....     ADD.W   #0x1, &usb_rx_ring_rd
+     47              if (usb_rx_ring_rd >= (SMALL_RING_SIZE)){
+   \   000018   B2900900.... CMP.W   #0x9, &usb_rx_ring_rd
+   \   00001E   F03B         JL      ??Read_USB_0
+     48                usb_rx_ring_rd = BEGINNING;
+   \   000020   8243....     MOV.W   #0x0, &usb_rx_ring_rd
+   \   000024   ED3F         JMP     ??Read_USB_0
+     49              }
+     50            } 
+     51          }
+   \                     ??Read_USB_1:
+   \   000026   1001         RETA
+
+   \                                 In  segment CODE, align 2
+     52          void Read_IOT(void){
+   \                     Read_IOT:
+   \                     ??Read_IOT_0:
+     53            while (iot_rx_ring_rd != iot_rx_ring_wr){
+   \   000000   9292........ CMP.W   &iot_rx_ring_wr, &iot_rx_ring_rd
+   \   000006   0F24         JEQ     ??Read_IOT_1
+     54              Write_USB(IOT_Char_Rx[iot_rx_ring_rd]);
+   \   000008   1F42....     MOV.W   &iot_rx_ring_rd, R15
+   \   00000C   5C4F....     MOV.B   IOT_Char_Rx(R15), R12
+   \   000010   ........     CALLA   #Write_USB
+     55              iot_rx_ring_rd++;
+   \   000014   9253....     ADD.W   #0x1, &iot_rx_ring_rd
+     56              if (iot_rx_ring_rd >= (SMALL_RING_SIZE)){
+   \   000018   B2900900.... CMP.W   #0x9, &iot_rx_ring_rd
+   \   00001E   F03B         JL      ??Read_IOT_0
+     57                iot_rx_ring_rd = BEGINNING;
+   \   000020   8243....     MOV.W   #0x0, &iot_rx_ring_rd
+   \   000024   ED3F         JMP     ??Read_IOT_0
+     58              }
+     59            }
+     60          }
+   \                     ??Read_IOT_1:
+   \   000026   1001         RETA
+     61          
+
+   \                                 In  segment CODE, align 2
+     62          void check_command(void) {
+   \                     check_command:
+     63            if(iot_command[CLEAR] == 'A'){
+   \   000000   F2904100.... CMP.B   #0x41, &iot_command
+   \   000006   0620         JNE     ??check_command_0
+     64              send_IOT(Command_length());
+   \   000008   ........     CALLA   #Command_length
+   \   00000C   ........     CALLA   #send_IOT
+     65              Clear_command();
+   \   000010   ........     CALLA   #Clear_command
+     66            }
+     67          }
+   \                     ??check_command_0:
+   \   000014   1001         RETA
+     68          
+
+   \                                 In  segment CODE, align 2
+     69          void send_IOT(int length){
+   \                     send_IOT:
+   \   000000   1B15         PUSHM.W #0x2, R11
+   \   000002   0A4C         MOV.W   R12, R10
+     70            for(int i=CLEAR; i<length;i++){
+   \   000004   0B43         MOV.W   #0x0, R11
+   \                     ??send_IOT_0:
+   \   000006   0B9A         CMP.W   R10, R11
+   \   000008   0B34         JGE     ??send_IOT_1
+     71              UCA1TXBUF = iot_command[i];
+   \   00000A   5F4B....     MOV.B   iot_command(R11), R15
+   \   00000E   4F4F         MOV.B   R15, R15
+   \   000010   824FEE05     MOV.W   R15, &0x5ee
+     72              five_msec_delay(QUARTERSECOND);
+   \   000014   3C403200     MOV.W   #0x32, R12
+   \   000018   ........     CALLA   #five_msec_delay
+     73            }
+   \   00001C   1B53         ADD.W   #0x1, R11
+   \   00001E   F33F         JMP     ??send_IOT_0
+     74          }
+   \                     ??send_IOT_1:
+   \   000020   1A17         POPM.W  #0x2, R11
+   \   000022   1001         RETA
+   \   000024                REQUIRE _A_UCA1TXBUF_L
+     75          
+
+   \                                 In  segment CODE, align 2
+     76          void Clear_command(void){
+   \                     Clear_command:
+     77            for(int i=CLEAR; i<IOT_LENGTH; i++){
+   \   000000   0F43         MOV.W   #0x0, R15
+   \                     ??Clear_command_0:
+   \   000002   3F902800     CMP.W   #0x28, R15
+   \   000006   0534         JGE     ??Clear_command_1
+     78              iot_command[i] = SLASH;
+   \   000008   FF400D00.... MOV.B   #0xd, iot_command(R15)
+     79            }
+   \   00000E   1F53         ADD.W   #0x1, R15
+   \   000010   F83F         JMP     ??Clear_command_0
+     80          }
+   \                     ??Clear_command_1:
+   \   000012   1001         RETA
+     81          
+
+   \                                 In  segment CODE, align 2
+     82          int Command_length(void){
+   \                     Command_length:
+     83            iot_length=CLEAR;
+   \   000000   8243....     MOV.W   #0x0, &iot_length
+     84            while(iot_command[iot_length] != (SLASH)){
+   \                     ??Command_length_0:
+   \   000004   1F42....     MOV.W   &iot_length, R15
+   \   000008   FF900D00.... CMP.B   #0xd, iot_command(R15)
+   \   00000E   0324         JEQ     ??Command_length_1
+     85              iot_length++;
+   \   000010   9253....     ADD.W   #0x1, &iot_length
+   \   000014   F73F         JMP     ??Command_length_0
+     86            }
+     87            return (IOT_LENGTH);
+   \                     ??Command_length_1:
+   \   000016   3C402800     MOV.W   #0x28, R12
+   \   00001A   1001         RETA
+     88          }
+     89          
+
+   \                                 In  segment CODE, align 2
+     90          void Clear_Car_Command(void) {
+   \                     Clear_Car_Command:
+     91            for (int i = CLEAR; i < 99; i++) {
+   \   000000   0F43         MOV.W   #0x0, R15
+   \                     ??Clear_Car_Command_0:
+   \   000002   3F906300     CMP.W   #0x63, R15
+   \   000006   0434         JGE     ??Clear_Car_Command_1
+     92              car_command[i] = 0x00;
+   \   000008   CF43....     MOV.B   #0x0, car_command(R15)
+     93            }
+   \   00000C   1F53         ADD.W   #0x1, R15
+   \   00000E   F93F         JMP     ??Clear_Car_Command_0
+     94          }
+   \                     ??Clear_Car_Command_1:
+   \   000010   1001         RETA
+     95          
+
+   \                                 In  segment CODE, align 2
+     96          void IOT_Reset(void) {
+   \                     IOT_Reset:
+     97            PJOUT &= ~IOT_RESET;
+   \   000000   B2C22203     BIC.W   #0x8, &0x322
+     98            five_msec_delay(200);
+   \   000004   3C40C800     MOV.W   #0xc8, R12
+   \   000008   ........     CALLA   #five_msec_delay
+     99            PJOUT |= IOT_RESET;
+   \   00000C   B2D22203     BIS.W   #0x8, &0x322
+    100          }
+   \   000010   1001         RETA
+   \   000012                REQUIRE _A_PJOUT_L
+    101          
+    102          
+    103          
+    104          
+    105          
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Clear_Car_Command
+      4   Clear_command
+      4   Command_length
+      4   IOT_Reset
+        4   -> five_msec_delay
+      4   Read_IOT
+        4   -> Write_USB
+      4   Read_USB
+        4   -> Write_IOT
+      4   Write_IOT
+      4   Write_USB
+      4   check_command
+        4   -> Clear_command
+        4   -> Command_length
+        4   -> send_IOT
+      8   send_IOT
+        8   -> five_msec_delay
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      18  Clear_Car_Command
+      20  Clear_command
+      28  Command_length
+      18  IOT_Reset
+      40  Read_IOT
+      40  Read_USB
+      18  Write_IOT
+      14  Write_USB
+       2  _A_PJOUT_L
+       2  _A_UCA0IFG_L
+       2  _A_UCA0TXBUF_L
+       2  _A_UCA1IE_L
+       2  _A_UCA1IFG_L
+       2  _A_UCA1TXBUF_L
+      22  check_command
+      36  send_IOT
+
+ 
+ 254 bytes in segment CODE
+  12 bytes in segment DATA16_AN
+ 
+ 254 bytes of CODE memory
+   0 bytes of DATA memory (+ 12 bytes shared)
+
+Errors: none
+Warnings: none

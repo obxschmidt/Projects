@@ -1,0 +1,979 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V6.40.1.950/W32 for MSP430           20/Apr/2016  15:49:51
+# Copyright 1996-2015 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.40
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\main.c
+#    Command line  =  
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\main.c -lC
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\Debug\List -o
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\Debug\Obj --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5739__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 7.3\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large
+#    List file     =  
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\Debug\List\main.lst
+#    Object file   =  
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\Debug\Obj\main.r43
+#
+###############################################################################
+
+C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\main.c
+      1          //------------------------------------------------------------------------------
+      2          //
+      3          //  Description: This file contains the Main Routine - "While" Operating System
+      4          //
+      5          //  Passed : no variables passed
+      6          //  Locals: no variables declared
+      7          //  Returned: no values returned
+      8          //  Globals: char* display_1
+      9          //  char* display_2
+     10          //  slow_input_down
+     11          //  control_state[CNTL_STATE_INDEX]
+     12          //
+     13          //  Calvin Schmidt
+     14          //  Feb 2016
+     15          //  Built with IAR Embedded Workbench Version: V7.3.1.3987 (6.40.1)
+     16          //------------------------------------------------------------------------------
+     17          
+     18          //------------------------------------------------------------------------------
+     19          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x220
+   \   union <unnamed> _A_PBIN_L
+   \                     _A_PBIN_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x322
+   \   union <unnamed> _A_PJOUT_L
+   \                     _A_PJOUT_L:
+   \   000000                DS8 2
+     20          #include  "functions.h"
+     21          #include  "macros.h"
+     22          
+     23          // Global Variables
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     24          volatile unsigned char control_state[CNTL_STATE_INDEX];
+   \                     control_state:
+   \   000000                DS8 3
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     25          volatile unsigned int Time_Sequence;
+   \                     Time_Sequence:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     26          volatile unsigned int counter = START;
+   \                     counter:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     27          char led_smclk;
+   \                     led_smclk:
+   \   000000                DS8 1
+     28          // Display Globals
+     29          extern char display_line_1[LENGTHOFDISPLAY];
+     30          extern char display_line_2[LENGTHOFDISPLAY];
+     31          extern char display_line_3[LENGTHOFDISPLAY];
+     32          extern char display_line_4[LENGTHOFDISPLAY];
+     33          extern char *display_1;
+     34          extern char *display_2;
+     35          extern char *display_3;
+     36          extern char *display_4;
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     37          char posL1;
+   \                     posL1:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     38          char posL2;
+   \                     posL2:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     39          char posL3;
+   \                     posL3:
+   \   000000                DS8 1
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     40          char posL4;
+   \                     posL4:
+   \   000000                DS8 1
+     41          // Interrupt Globals
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     42          int msec_count; // used for 5msec delay
+   \                     msec_count:
+   \   000000                DS8 2
+     43          // ADC Globals
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     44          int ADC_Thumb;
+   \                     ADC_Thumb:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     45          char adc_char[ADC_LENGTH];
+   \                     adc_char:
+   \   000000                DS8 5
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     46          int Current_Time;
+   \                     Current_Time:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     47          int ADC_Channel = CLEAR;
+   \                     ADC_Channel:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     48          int ADC_Left_Detector;
+   \                     ADC_Left_Detector:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     49          int ADC_Right_Detector;
+   \                     ADC_Right_Detector:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     50          char msec_display[MSEC_LENGTH]; // For dec_to_char (hextobcd)
+   \                     msec_display:
+   \   000000                DS8 6
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     51          int SW_Count = CLEAR;
+   \                     SW_Count:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     52          int Black_Line;
+   \                     Black_Line:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     53          int White_Line;
+   \                     White_Line:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     54          int ADC_Flag = FALSE; // Start/Disables black line detection code in main
+   \                     ADC_Flag:
+   \   000000                DS8 2
+     55          // PWM Globals
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     56          int right_forward_rate;
+   \                     right_forward_rate:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     57          int right_reverse_rate;
+   \                     right_reverse_rate:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     58          int left_forward_rate;
+   \                     left_forward_rate:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     59          int left_reverse_rate;
+   \                     left_reverse_rate:
+   \   000000                DS8 2
+     60          // Serial Communications globals
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     61          char message[SMALL_RING_SIZE] = "NCSU  #1";
+   \                     message:
+   \   000000                DS8 9
+   \   000009                REQUIRE `?<Initializer for message>`
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     62          int usb_rx_ring_wr;
+   \                     usb_rx_ring_wr:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     63          int usb_rx_ring_rd;
+   \                     usb_rx_ring_rd:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     64          int usb_tx_ring_wr;
+   \                     usb_tx_ring_wr:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     65          int usb_tx_ring_rd;
+   \                     usb_tx_ring_rd:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     66          char USB_Char_Tx[SMALL_RING_SIZE];
+   \                     USB_Char_Tx:
+   \   000000                DS8 9
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     67          char USB_Char_Rx[SMALL_RING_SIZE];
+   \                     USB_Char_Rx:
+   \   000000                DS8 9
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     68          char IOT_Char_Tx[SMALL_RING_SIZE];
+   \                     IOT_Char_Tx:
+   \   000000                DS8 9
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     69          char IOT_Char_Rx[SMALL_RING_SIZE];
+   \                     IOT_Char_Rx:
+   \   000000                DS8 9
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     70          int iot_tx_ring_wr;
+   \                     iot_tx_ring_wr:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     71          int iot_rx_ring_wr;
+   \                     iot_rx_ring_wr:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     72          int iot_tx_ring_rd;
+   \                     iot_tx_ring_rd:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     73          int iot_rx_ring_rd;
+   \                     iot_rx_ring_rd:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     74          int First_Char_Received = FALSE;
+   \                     First_Char_Received:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     75          int check_com;
+   \                     check_com:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     76          int buff = CLEAR;
+   \                     buff:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     77          int com_ind = CLEAR;
+   \                     com_ind:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     78          int catch;
+   \                     catch:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     79          char iot_command[IOT_LENGTH];
+   \                     iot_command:
+   \   000000                DS8 40
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     80          int iot_length;
+   \                     iot_length:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     81          char iot_ip[IOT_LENGTH];
+   \                     iot_ip:
+   \   000000                DS8 40
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     82          char ip_display[IP_END];
+   \                     ip_display:
+   \   000000                DS8 14
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     83          int ip_display_counter = CLEAR;
+   \                     ip_display_counter:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     84          char ip_display_2[PIN_BUFFER];
+   \                     ip_display_2:
+   \   000000                DS8 4
+
+   \                                 In  segment DATA16_I, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     85          char ip_command_array[IOT_COMMAND_LENGTH] = "AT+S.STS";
+   \                     ip_command_array:
+   \   000000                DS8 8
+   \   000008                REQUIRE `?<Initializer for ip_command_array>`
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     86          int iot_flag;
+   \                     iot_flag:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     87          char car_command[HUNDRED];
+   \                     car_command:
+   \   000000                DS8 100
+     88          extern int start_command;
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     89          int time_forward;
+   \                     time_forward:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     90          int time_forward1;
+   \                     time_forward1:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     91          int time_forward2;
+   \                     time_forward2:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     92          int time_forward3;
+   \                     time_forward3:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     93          char* left_adc_ptr;
+   \                     left_adc_ptr:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     94          char* right_adc_ptr;
+   \                     right_adc_ptr:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     95          char left_adc_data[MSEC_LENGTH];
+   \                     left_adc_data:
+   \   000000                DS8 6
+
+   \                                 In  segment DATA16_Z, align 1, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     96          char right_adc_data[MSEC_LENGTH];
+   \                     right_adc_data:
+   \   000000                DS8 6
+
+   \                                 In  segment DATA16_I, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_copy
+     97          int Controller_Flag = TRUE;
+   \                     Controller_Flag:
+   \   000000                DS8 2
+   \   000002                REQUIRE `?<Initializer for Controller_Flag>`
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+     98          int iot_reset_flag = FALSE;
+   \                     iot_reset_flag:
+   \   000000                DS8 2
+     99          
+    100          // other globals
+
+   \                                 In  segment DATA16_Z, align 2, align-sorted
+   \   000000                REQUIRE ?cstart_init_zero
+    101          int adc_display_flag = FALSE;
+   \                     adc_display_flag:
+   \   000000                DS8 2
+    102          
+    103          
+    104          
+
+   \                                 In  segment CODE, align 2
+    105          void main(void){
+   \                     main:
+    106          //------------------------------------------------------------------------------
+    107          // Main Program
+    108          // This is the main routine for the program. Execution of code starts here.
+    109          // The operating system is Back Ground Fore Ground.
+    110          // 
+    111          //  Calvin Schmidt
+    112          //  Feb 2016
+    113          //  Built with IAR Embedded Workbench Version: V7.3.1.3987 (6.40.1)  
+    114          //------------------------------------------------------------------------------
+    115            Init_Ports();                             // Initialize Ports
+   \   000000   ........     CALLA   #Init_Ports
+    116            Init_Clocks();                            // Initialize Clock System 
+   \   000004   ........     CALLA   #Init_Clocks
+    117            Init_Conditions();                        //
+   \   000008   ........     CALLA   #Init_Conditions
+    118            Init_Timers();                            // Initialize Timers
+   \   00000C   ........     CALLA   #Init_Timers
+    119            Init_LCD();                               // Initialize LCD
+   \   000010   ........     CALLA   #Init_LCD
+    120            Init_ADC();                               // Initialize ADC
+   \   000014   ........     CALLA   #Init_ADC
+    121            Init_Serial_UCA0(BAUD_9600);              //Baud Rate Value to get 9600
+   \   000018   3C403400     MOV.W   #0x34, R12
+   \   00001C   ........     CALLA   #Init_Serial_UCA0
+    122            Init_Serial_UCA1(BAUD_9600);
+   \   000020   3C403400     MOV.W   #0x34, R12
+   \   000024   ........     CALLA   #Init_Serial_UCA1
+    123            ADC_Process();
+   \   000028   ........     CALLA   #ADC_Process
+    124            
+    125            display_1 = "Project 08";
+   \   00002C   B240........ MOV.W   #`?<Constant "Project 08">`, &display_1
+    126            posL1 = CLEAR;
+   \   000032   C243....     MOV.B   #0x0, &posL1
+    127            Display_Process();
+   \   000036   ........     CALLA   #Display_Process
+    128            
+    129            PJOUT |= IOT_RESET; // Pull IOT_RESET Pin high
+   \   00003A   B2D22203     BIS.W   #0x8, &0x322
+    130            Clear_command();
+   \   00003E   ........     CALLA   #Clear_command
+    131            
+    132            //--------------
+    133            // Temporary test stuff
+    134           
+    135            //--------------
+    136            
+    137          //------------------------------------------------------------------------------
+    138          // Begining of the "While" Operating System
+    139          //------------------------------------------------------------------------------
+    140           while(ALWAYS) {                            // Can the Operating system run
+    141             
+    142             if (iot_reset_flag) {
+   \                     ??main_4:
+   \   000042   8293....     CMP.W   #0x0, &iot_reset_flag
+   \   000046   0424         JEQ     ??main_7
+    143               iot_reset_flag = FALSE;
+   \   000048   8243....     MOV.W   #0x0, &iot_reset_flag
+    144               IOT_Reset();
+   \   00004C   ........     CALLA   #IOT_Reset
+    145             }
+    146             if (car_command[ONE+PIN_BUFFER] == 'E') {
+   \                     ??main_7:
+   \   000050   F2904500.... CMP.B   #0x45, &car_command + 5
+   \   000056   0820         JNE     ??main_8
+    147                     ADC_Flag = FALSE;
+   \   000058   8243....     MOV.W   #0x0, &ADC_Flag
+    148                     Controller_Flag = TRUE;
+   \   00005C   9243....     MOV.W   #0x1, &Controller_Flag
+    149                     Right_Wheel_Off();
+   \   000060   ........     CALLA   #Right_Wheel_Off
+    150                     Left_Wheel_Off();
+   \   000064   ........     CALLA   #Left_Wheel_Off
+    151                   } 
+    152             
+    153             if (Controller_Flag) { // Flag to enable sending car commands via controller
+   \                     ??main_8:
+   \   000068   8293....     CMP.W   #0x0, &Controller_Flag
+   \   00006C   B024         JEQ     ??main_9
+    154               if (!(P4IN & SW1)) { // Puts IP address into 2 arrays and displays them
+   \   00006E   D2B32102     BIT.B   #0x1, &0x221
+   \   000072   322C         JC      ??main_10
+    155                 for (int i = IP_START; i <= (IP_START+IP_END); i++) {
+   \   000074   3A400B00     MOV.W   #0xb, R10
+   \                     ??main_0:
+   \   000078   3A901A00     CMP.W   #0x1a, R10
+   \   00007C   0D34         JGE     ??main_11
+    156                   ip_display[ip_display_counter] = iot_ip[i];
+   \   00007E   1F42....     MOV.W   &ip_display_counter, R15
+   \   000082   DF4A........ MOV.B   iot_ip(R10), ip_display(R15)
+    157                   ip_display_counter++;
+   \   000088   9253....     ADD.W   #0x1, &ip_display_counter
+    158                   five_msec_delay(SHORT);
+   \   00008C   3C400A00     MOV.W   #0xa, R12
+   \   000090   ........     CALLA   #five_msec_delay
+    159                 }
+   \   000094   1A53         ADD.W   #0x1, R10
+   \   000096   F03F         JMP     ??main_0
+    160                 ip_display[IP_END - TRUE] = '\0';
+   \                     ??main_11:
+   \   000098   C243....     MOV.B   #0x0, &ip_display + 13
+    161                 display_3 = ip_display;
+   \   00009C   B240........ MOV.W   #ip_display, &display_3
+    162                 
+    163                 ip_display_counter = CLEAR;
+   \   0000A2   8243....     MOV.W   #0x0, &ip_display_counter
+    164                 for (int i = IP2_START; i <= IP2_END; i++) {
+   \   0000A6   3A400A00     MOV.W   #0xa, R10
+   \                     ??main_1:
+   \   0000AA   3A900E00     CMP.W   #0xe, R10
+   \   0000AE   0D34         JGE     ??main_12
+    165                   ip_display_2[ip_display_counter] = ip_display[i];
+   \   0000B0   1F42....     MOV.W   &ip_display_counter, R15
+   \   0000B4   DF4A........ MOV.B   ip_display(R10), ip_display_2(R15)
+    166                   ip_display_counter++;
+   \   0000BA   9253....     ADD.W   #0x1, &ip_display_counter
+    167                   five_msec_delay(SHORT);
+   \   0000BE   3C400A00     MOV.W   #0xa, R12
+   \   0000C2   ........     CALLA   #five_msec_delay
+    168                 }
+   \   0000C6   1A53         ADD.W   #0x1, R10
+   \   0000C8   F03F         JMP     ??main_1
+    169                 ip_display_2[END_IP] = '\0';
+   \                     ??main_12:
+   \   0000CA   C243....     MOV.B   #0x0, &ip_display_2 + 3
+    170                 display_4 = ip_display_2;
+   \   0000CE   B240........ MOV.W   #ip_display_2, &display_4
+    171                 
+    172                 Display_Process();
+   \   0000D4   ........     CALLA   #Display_Process
+    173               }
+    174               
+    175               if (!(P4IN & SW2)) { // sends command to IOT to get current IP address
+   \                     ??main_10:
+   \   0000D8   E2B32102     BIT.B   #0x2, &0x221
+   \   0000DC   0E2C         JC      ??main_13
+    176                 five_msec_delay(QUARTERSECOND);
+   \   0000DE   3C403200     MOV.W   #0x32, R12
+   \   0000E2   ........     CALLA   #five_msec_delay
+    177                 for (int i = CLEAR; i < IOT_COMMAND_LENGTH; i++) {
+   \   0000E6   0F43         MOV.W   #0x0, R15
+   \                     ??main_2:
+   \   0000E8   3F92         CMP.W   #0x8, R15
+   \   0000EA   0534         JGE     ??main_14
+    178                   iot_command[i] = ip_command_array[i];
+   \   0000EC   DF4F........ MOV.B   ip_command_array(R15), iot_command(R15)
+    179                 }
+   \   0000F2   1F53         ADD.W   #0x1, R15
+   \   0000F4   F93F         JMP     ??main_2
+    180                 check_command();
+   \                     ??main_14:
+   \   0000F6   ........     CALLA   #check_command
+    181               }
+    182               
+    183               if (start_command == TRUE) {
+   \                     ??main_13:
+   \   0000FA   9293....     CMP.W   #0x1, &start_command
+   \   0000FE   6720         JNE     ??main_9
+    184                 for (int n = BEGIN; n <= 10; n = n+BUFFER) { // I changed this from COMMAND_LENGTH to 10
+   \   000100   1A43         MOV.W   #0x1, R10
+   \                     ??main_3:
+   \   000102   3A900B00     CMP.W   #0xb, R10
+   \   000106   5F34         JGE     ??main_15
+    185                   if (car_command[n+PIN_BUFFER] == 'F') {
+   \   000108   FA904600.... CMP.B   #0x46, car_command + 4(R10)
+   \   00010E   0D20         JNE     ??main_16
+    186                     Right_Wheel_Forward(FULL_SPEED);
+   \   000110   3C40401F     MOV.W   #0x1f40, R12
+   \   000114   ........     CALLA   #Right_Wheel_Forward
+    187                     Left_Wheel_Forward(FULL_SPEED);
+   \   000118   3C40401F     MOV.W   #0x1f40, R12
+   \   00011C   ........     CALLA   #Left_Wheel_Forward
+    188                     //
+    189                     display_2 = "Forward";
+   \   000120   B240........ MOV.W   #`?<Constant "Forward">`, &display_2
+    190                     Display_Process();
+   \   000126   ........     CALLA   #Display_Process
+    191                   }
+    192                   if (car_command[n+PIN_BUFFER] == 'B') {
+   \                     ??main_16:
+   \   00012A   FA904200.... CMP.B   #0x42, car_command + 4(R10)
+   \   000130   0D20         JNE     ??main_17
+    193                     Right_Wheel_Reverse(FULL_SPEED);
+   \   000132   3C40401F     MOV.W   #0x1f40, R12
+   \   000136   ........     CALLA   #Right_Wheel_Reverse
+    194                     Left_Wheel_Reverse(FULL_SPEED);
+   \   00013A   3C40401F     MOV.W   #0x1f40, R12
+   \   00013E   ........     CALLA   #Left_Wheel_Reverse
+    195                     //
+    196                     display_2 = "Reverse";
+   \   000142   B240........ MOV.W   #`?<Constant "Reverse">`, &display_2
+    197                     Display_Process();
+   \   000148   ........     CALLA   #Display_Process
+    198                   }
+    199                   if (car_command[n+PIN_BUFFER] == 'R') {
+   \                     ??main_17:
+   \   00014C   FA905200.... CMP.B   #0x52, car_command + 4(R10)
+   \   000152   0D20         JNE     ??main_18
+    200                     Left_Wheel_Forward(FULL_SPEED);
+   \   000154   3C40401F     MOV.W   #0x1f40, R12
+   \   000158   ........     CALLA   #Left_Wheel_Forward
+    201                     Right_Wheel_Reverse(FULL_SPEED);
+   \   00015C   3C40401F     MOV.W   #0x1f40, R12
+   \   000160   ........     CALLA   #Right_Wheel_Reverse
+    202                     //
+    203                     display_2 = "Right";
+   \   000164   B240........ MOV.W   #`?<Constant "Right">`, &display_2
+    204                     Display_Process();
+   \   00016A   ........     CALLA   #Display_Process
+    205                   }
+    206                   if (car_command[n+PIN_BUFFER] == 'L') {
+   \                     ??main_18:
+   \   00016E   FA904C00.... CMP.B   #0x4c, car_command + 4(R10)
+   \   000174   0D20         JNE     ??main_19
+    207                     Right_Wheel_Forward(FULL_SPEED);
+   \   000176   3C40401F     MOV.W   #0x1f40, R12
+   \   00017A   ........     CALLA   #Right_Wheel_Forward
+    208                     Left_Wheel_Reverse(FULL_SPEED);
+   \   00017E   3C40401F     MOV.W   #0x1f40, R12
+   \   000182   ........     CALLA   #Left_Wheel_Reverse
+    209                     //
+    210                     display_2 = "Left";
+   \   000186   B240........ MOV.W   #`?<Constant "Left">`, &display_2
+    211                     Display_Process();
+   \   00018C   ........     CALLA   #Display_Process
+    212                   }
+    213                   if (car_command[n+PIN_BUFFER] == 'S') {
+   \                     ??main_19:
+   \   000190   FA905300.... CMP.B   #0x53, car_command + 4(R10)
+   \   000196   0920         JNE     ??main_20
+    214                     Right_Wheel_Off();
+   \   000198   ........     CALLA   #Right_Wheel_Off
+    215                     Left_Wheel_Off();
+   \   00019C   ........     CALLA   #Left_Wheel_Off
+    216                     //
+    217                     display_2 = "Stopped";
+   \   0001A0   B240........ MOV.W   #`?<Constant "Stopped">`, &display_2
+    218                     Display_Process();
+   \   0001A6   ........     CALLA   #Display_Process
+    219                   }    
+    220                   if (car_command[n+PIN_BUFFER] == 'D') {
+   \                     ??main_20:
+   \   0001AA   FA904400.... CMP.B   #0x44, car_command + 4(R10)
+   \   0001B0   0820         JNE     ??main_21
+    221                     ADC_Flag = TRUE;
+   \   0001B2   9243....     MOV.W   #0x1, &ADC_Flag
+    222                     Controller_Flag = FALSE;
+   \   0001B6   8243....     MOV.W   #0x0, &Controller_Flag
+    223                     Right_Wheel_Off();
+   \   0001BA   ........     CALLA   #Right_Wheel_Off
+    224                     Left_Wheel_Off();
+   \   0001BE   ........     CALLA   #Left_Wheel_Off
+    225                   }
+    226                 }
+   \                     ??main_21:
+   \   0001C2   2A53         ADD.W   #0x2, R10
+   \   0001C4   9E3F         JMP     ??main_3
+    227                 start_command = FALSE;       
+   \                     ??main_15:
+   \   0001C6   8243....     MOV.W   #0x0, &start_command
+    228                 Clear_Car_Command();
+   \   0001CA   ........     CALLA   #Clear_Car_Command
+    229               }
+    230             }
+    231             
+    232             // Black line detection code
+    233             /*// Old code for testing black line detection
+    234             if (!(P4IN & SW1)) { // enables black line detections
+    235               five_msec_delay(100);
+    236               ADC_Flag = TRUE;
+    237               adc_display_flag = FALSE;
+    238             }
+    239             
+    240             if (adc_display_flag) { // enables the display to show adc values
+    241               ADC_Flag = FALSE;
+    242               
+    243               display_1 = "L_Detector";
+    244               display_3 = "R_Detector";
+    245               dec_to_char(ADC_Left_Detector);
+    246               offload_num(left_adc_data);
+    247               left_adc_ptr = left_adc_data;
+    248               display_2 = left_adc_ptr;
+    249               dec_to_char(ADC_Right_Detector);
+    250               offload_num(right_adc_data);
+    251               right_adc_ptr = right_adc_data;
+    252               display_4 = right_adc_ptr;
+    253               five_msec_delay(10);
+    254               Display_Process();
+    255             }
+    256             if (!(P4IN & SW2)) {
+    257               adc_display_flag = TRUE;
+    258             }
+    259              */
+    260             if (ADC_Flag) {
+   \                     ??main_9:
+   \   0001CE   8293....     CMP.W   #0x0, &ADC_Flag
+   \   0001D2   3727         JEQ     ??main_4
+    261               Right_Wheel_Forward(QUARTER_SPEED);
+   \   0001D4   3C40D007     MOV.W   #0x7d0, R12
+   \   0001D8   ........     CALLA   #Right_Wheel_Forward
+    262               Left_Wheel_Forward(QUARTER_SPEED);
+   \   0001DC   3C40D007     MOV.W   #0x7d0, R12
+   \   0001E0   ........     CALLA   #Left_Wheel_Forward
+    263               
+    264               if (ADC_Left_Detector <= BLACKLINE) {
+   \   0001E4   B2909101.... CMP.W   #0x191, &ADC_Left_Detector
+   \   0001EA   0734         JGE     ??main_22
+    265                 while (ADC_Left_Detector <= BLACKLINE) {
+   \                     ??main_5:
+   \   0001EC   B2909101.... CMP.W   #0x191, &ADC_Left_Detector
+   \   0001F2   0334         JGE     ??main_22
+    266                   Right_Wheel_Off();
+   \   0001F4   ........     CALLA   #Right_Wheel_Off
+   \   0001F8   F93F         JMP     ??main_5
+    267                 }
+    268               }
+    269               
+    270               if (ADC_Right_Detector <= BLACKLINE) {
+   \                     ??main_22:
+   \   0001FA   B2909101.... CMP.W   #0x191, &ADC_Right_Detector
+   \   000200   2037         JGE     ??main_4
+    271                 while (ADC_Right_Detector <= BLACKLINE){
+   \                     ??main_6:
+   \   000202   B2909101.... CMP.W   #0x191, &ADC_Right_Detector
+   \   000208   1C37         JGE     ??main_4
+    272                   Left_Wheel_Off();
+   \   00020A   ........     CALLA   #Left_Wheel_Off
+   \   00020E   F93F         JMP     ??main_6
+   \   000210   0343         NOP
+   \   000212                REQUIRE _A_PJOUT_L
+   \   000212                REQUIRE _A_PBIN_L
+    273                 }
+    274               }
+    275               // Both detectors detects white
+    276               
+    277               //if (ADC_Left_Detector <= BLACKLINE && ADC_Right_Detector <= BLACKLINE) {
+    278                 //Right_Wheel_Reverse(QUARTER_SPEED);
+    279                 //Left_Wheel_Reverse(QUARTER_SPEED);
+    280               //}
+    281             }
+    282           }
+    283          }
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for message>`:
+   \   000000   4E4353552020 DC8 "NCSU  #1"
+   \            233100      
+
+   \                                 In  segment DATA16_ID, align 1, align-sorted
+   \                     `?<Initializer for ip_command_array>`:
+   \   000000   41542B532E53 DC8 41H, 54H, 2BH, 53H, 2EH, 53H, 54H, 53H
+   \            5453        
+
+   \                                 In  segment DATA16_ID, align 2, align-sorted
+   \                     `?<Initializer for Controller_Flag>`:
+   \   000000   0100         DC16 1
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Project 08">`:
+   \   000000   50726F6A6563 DC8 "Project 08"
+   \            7420303800  
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Forward">`:
+   \   000000   466F72776172 DC8 "Forward"
+   \            6400        
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Reverse">`:
+   \   000000   526576657273 DC8 "Reverse"
+   \            6500        
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Right">`:
+   \   000000   526967687400 DC8 "Right"
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Left">`:
+   \   000000   4C65667400   DC8 "Left"
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "Stopped">`:
+   \   000000   53746F707065 DC8 "Stopped"
+   \            6400        
+    284          //------------------------------------------------------------------------------
+    285          
+    286          
+    287          
+    288          
+    289          
+    290          
+    291          
+    292          
+    293          
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   main
+        4   -> ADC_Process
+        4   -> Clear_Car_Command
+        4   -> Clear_command
+        4   -> Display_Process
+        4   -> IOT_Reset
+        4   -> Init_ADC
+        4   -> Init_Clocks
+        4   -> Init_Conditions
+        4   -> Init_LCD
+        4   -> Init_Ports
+        4   -> Init_Serial_UCA0
+        4   -> Init_Serial_UCA1
+        4   -> Init_Timers
+        4   -> Left_Wheel_Forward
+        4   -> Left_Wheel_Off
+        4   -> Left_Wheel_Reverse
+        4   -> Right_Wheel_Forward
+        4   -> Right_Wheel_Off
+        4   -> Right_Wheel_Reverse
+        4   -> check_command
+        4   -> five_msec_delay
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       8  ?<Constant "Forward">
+       5  ?<Constant "Left">
+      11  ?<Constant "Project 08">
+       8  ?<Constant "Reverse">
+       6  ?<Constant "Right">
+       8  ?<Constant "Stopped">
+       2  ?<Initializer for Controller_Flag>
+       8  ?<Initializer for ip_command_array>
+       9  ?<Initializer for message>
+       2  ADC_Channel
+       2  ADC_Flag
+       2  ADC_Left_Detector
+       2  ADC_Right_Detector
+       2  ADC_Thumb
+       2  Black_Line
+       2  Controller_Flag
+       2  Current_Time
+       2  First_Char_Received
+       9  IOT_Char_Rx
+       9  IOT_Char_Tx
+       2  SW_Count
+       2  Time_Sequence
+       9  USB_Char_Rx
+       9  USB_Char_Tx
+       2  White_Line
+       2  _A_PBIN_L
+       2  _A_PJOUT_L
+       5  adc_char
+       2  adc_display_flag
+       2  buff
+     100  car_command
+       2  catch
+       2  check_com
+       2  com_ind
+       3  control_state
+       2  counter
+      40  iot_command
+       2  iot_flag
+      40  iot_ip
+       2  iot_length
+       2  iot_reset_flag
+       2  iot_rx_ring_rd
+       2  iot_rx_ring_wr
+       2  iot_tx_ring_rd
+       2  iot_tx_ring_wr
+       8  ip_command_array
+      14  ip_display
+       4  ip_display_2
+       2  ip_display_counter
+       1  led_smclk
+       6  left_adc_data
+       2  left_adc_ptr
+       2  left_forward_rate
+       2  left_reverse_rate
+     530  main
+       9  message
+       2  msec_count
+       6  msec_display
+       1  posL1
+       1  posL2
+       1  posL3
+       1  posL4
+       6  right_adc_data
+       2  right_adc_ptr
+       2  right_forward_rate
+       2  right_reverse_rate
+       2  time_forward
+       2  time_forward1
+       2  time_forward2
+       2  time_forward3
+       2  usb_rx_ring_rd
+       2  usb_rx_ring_wr
+       2  usb_tx_ring_rd
+       2  usb_tx_ring_wr
+
+ 
+ 530 bytes in segment CODE
+   4 bytes in segment DATA16_AN
+  46 bytes in segment DATA16_C
+  19 bytes in segment DATA16_I
+  19 bytes in segment DATA16_ID
+ 345 bytes in segment DATA16_Z
+ 
+ 530 bytes of CODE  memory
+  65 bytes of CONST memory
+ 364 bytes of DATA  memory (+ 4 bytes shared)
+
+Errors: none
+Warnings: none

@@ -1,0 +1,172 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V6.40.1.950/W32 for MSP430           20/Apr/2016  15:43:38
+# Copyright 1996-2015 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.40
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\interrupts_switch.c
+#    Command line  =  
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\interrupts_switch.c -lC
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\Debug\List -o
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\Debug\Obj --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5739__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 7.3\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large
+#    List file     =  
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\Debug\List\interrupts_switch.lst
+#    Object file   =  
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\Debug\Obj\interrupts_switch.r43
+#
+###############################################################################
+
+C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\interrupts_switch.c
+      1          //------------------------------------------------------------------------------
+      2          //
+      3          //  Description: This file contains the interrupts for switches
+      4          //
+      5          //
+      6          //  Calvin Schmidt
+      7          //  Feb 2016
+      8          //  Built with IAR Embedded Workbench Version: V7.3.1.3987 (6.40.1)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x23c
+   \   union <unnamed> _A_PBIFG_L
+   \                     _A_PBIFG_L:
+   \   000000                DS8 2
+     12          #include  "functions.h"
+     13          #include  "macros.h"
+     14          
+     15          // Display Globals
+     16          extern char display_line_1[LENGTHOFDISPLAY];
+     17          extern char display_line_2[LENGTHOFDISPLAY];
+     18          extern char display_line_3[LENGTHOFDISPLAY];
+     19          extern char display_line_4[LENGTHOFDISPLAY];
+     20          extern char *display_1;
+     21          extern char *display_2;
+     22          extern char *display_3;
+     23          extern char *display_4;
+     24          extern char posL1;
+     25          extern char posL2;
+     26          extern char posL3;
+     27          extern char posL4;
+     28          // PWM Globals
+     29          extern int right_forward_rate;
+     30          extern int right_reverse_rate;
+     31          extern int left_forward_rate;
+     32          extern int left_reverse_rate;
+     33          // Serial Communications Globals
+     34          extern int usb_rx_ring_wr;
+     35          extern int usb_rx_ring_rd;
+     36          extern int usb_tx_ring_wr;
+     37          extern int usb_tx_ring_rd;
+     38          extern char USB_Char_Tx[SMALL_RING_SIZE];
+     39          extern char USB_Char_Rx[SMALL_RING_SIZE];
+     40          extern char message[SMALL_RING_SIZE];
+     41          extern char IOT_Char_Tx[SMALL_RING_SIZE];
+     42          extern char IOT_Char_Rx[SMALL_RING_SIZE];
+     43          extern int iot_tx_ring_wr;
+     44          extern int iot_rx_ring_wr;
+     45          extern int iot_tx_ring_rd;
+     46          extern int iot_rx_ring_rd;
+     47          //
+     48          extern char ip_display[14];
+     49          extern char iot_ip[IOT_LENGTH];
+     50          extern char ip_display[14];
+     51          //------------------------------------------------------------------------------
+     52          //  Description: Port 4 interrupt. Switch 1 Press begins movement for Project 4.
+     53          //               
+     54          //
+     55          //  Calvin Schmidt
+     56          //  Feb 2016
+     57          //  Built with IAR Embedded Workbench Version: V7.3.1.3987 (6.40.1) 
+     58          //------------------------------------------------------------------------------
+     59          
+     60          //Include #pragma vector = [Assigned Vector]
+     61          #pragma vector=PORT4_VECTOR
+     62          //Create Interrupt Service Routine Function with “__interrupt”
+
+   \                                 In  segment ISR_CODE, align 2
+     63          __interrupt void switch_interrupt(void) {
+   \                     switch_interrupt:
+   \   000000   3F15         PUSHM.W #0x4, R15
+     64          // Switch 1
+     65            if (P4IFG & SW1) { 
+   \   000002   D2B33D02     BIT.B   #0x1, &0x23d
+   \   000006   0228         JNC     ??switch_interrupt_0
+     66              P4IFG &= ~SW1;
+   \   000008   D2C33D02     BIC.B   #0x1, &0x23d
+     67              
+     68            }
+     69          // Switch 2
+     70           if (P4IFG & SW2) {
+   \                     ??switch_interrupt_0:
+   \   00000C   E2B33D02     BIT.B   #0x2, &0x23d
+   \   000010   0A28         JNC     ??switch_interrupt_1
+     71            P4IFG &= ~SW2; // Clear any current timer interrupt.
+   \   000012   E2C33D02     BIC.B   #0x2, &0x23d
+     72            
+     73            display_1 = "";
+   \   000016   B240........ MOV.W   #`?<Constant "">`, &display_1
+     74            display_2 = "";
+   \   00001C   B240........ MOV.W   #`?<Constant "">`, &display_2
+     75            Display_Process();
+   \   000022   ........     CALLA   #Display_Process
+     76           }
+     77          }
+   \                     ??switch_interrupt_1:
+   \   000026   3C17         POPM.W  #0x4, R15
+   \   000028   0013         RETI
+   \   00002A                REQUIRE _A_PBIFG_L
+
+   \                                 In  segment INTVEC, offset 0x40, root
+   \                     `??switch_interrupt::??INTVEC 64`:
+   \   000040   ....         DC16    switch_interrupt
+
+   \                                 In  segment DATA16_C, align 1, align-sorted
+   \                     `?<Constant "">`:
+   \   000000   00           DC8 ""
+     78          //------------------------------------------------------------------------------
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+     12   switch_interrupt
+       12   -> Display_Process
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+       1  ?<Constant "">
+       2  _A_PBIFG_L
+      42  switch_interrupt
+       2  switch_interrupt::??INTVEC 64
+
+ 
+  2 bytes in segment DATA16_AN
+  1 byte  in segment DATA16_C
+  2 bytes in segment INTVEC
+ 42 bytes in segment ISR_CODE
+ 
+ 42 bytes of CODE  memory
+  1 byte  of CONST memory (+ 2 bytes shared)
+  0 bytes of DATA  memory (+ 2 bytes shared)
+
+Errors: none
+Warnings: none

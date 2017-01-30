@@ -1,0 +1,483 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V6.40.1.950/W32 for MSP430           20/Apr/2016  15:43:38
+# Copyright 1996-2015 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.40
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\adc.c
+#    Command line  =  
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\adc.c -lC
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\Debug\List -o
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\Debug\Obj --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5739__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 7.3\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large
+#    List file     =  
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\Debug\List\adc.lst
+#    Object file   =  
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\Debug\Obj\adc.r43
+#
+###############################################################################
+
+C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\adc.c
+      1          //------------------------------------------------------------------------------
+      2          //
+      3          //  Description: This file contains the functions for adc
+      4          //
+      5          //
+      6          //  Calvin Schmidt
+      7          //  Feb 2016
+      8          //  Built with IAR Embedded Workbench Version: V7.3.1.3987 (6.40.1)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x700
+   \   union <unnamed> _A_ADC10CTL0_L
+   \                     _A_ADC10CTL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x702
+   \   union <unnamed> _A_ADC10CTL1_L
+   \                     _A_ADC10CTL1_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x704
+   \   union <unnamed> _A_ADC10CTL2_L
+   \                     _A_ADC10CTL2_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x70a
+   \   union <unnamed> _A_ADC10MCTL0_L
+   \                     _A_ADC10MCTL0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x712
+   \   union <unnamed> _A_ADC10MEM0_L
+   \                     _A_ADC10MEM0_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x71a
+   \   union <unnamed> _A_ADC10IE_L
+   \                     _A_ADC10IE_L:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x71e
+   \   union <unnamed> _A_ADC10IV_L
+   \                     _A_ADC10IV_L:
+   \   000000                DS8 2
+     12          #include  "functions.h"
+     13          #include  "macros.h"
+     14          
+     15          // display globals
+     16          extern char display_line_1[LENGTHOFDISPLAY];
+     17          extern char display_line_2[LENGTHOFDISPLAY];
+     18          extern char display_line_3[LENGTHOFDISPLAY];
+     19          extern char display_line_4[LENGTHOFDISPLAY];
+     20          extern char *display_1;
+     21          extern char *display_2;
+     22          extern char *display_3;
+     23          extern char *display_4;
+     24          extern char posL1;
+     25          extern char posL2;
+     26          extern char posL3;
+     27          extern char posL4;
+     28          //
+     29          
+     30          extern int ADC_Thumb;
+     31          extern char adc_char[5];
+     32          extern int Current_Time;
+     33          extern int ADC_Channel;
+     34          extern int ADC_Left_Detector;
+     35          extern int ADC_Right_Detector;
+     36          
+     37          extern char msec_display[6];
+     38          
+
+   \                                 In  segment CODE, align 2
+     39          void Init_ADC(void){
+   \                     Init_ADC:
+     40          //------------------------------------------------------------------------------
+     41          // Description: Configures ADC10_B
+     42          //
+     43          //  Calvin Schmidt
+     44          //  March 2016
+     45          //  Built with IAR Embedded Workbench Version: V7.3.1.3987 (6.40.1) 
+     46          //------------------------------------------------------------------------------
+     47           ADC10CTL0 = RESET_STATE;       // Clear ADC10CTL0
+   \   000000   82430007     MOV.W   #0x0, &0x700
+     48           ADC10CTL0 |= ADC10SHT_2;       // 16 ADC clocks
+   \   000004   B2D000020007 BIS.W   #0x200, &0x700
+     49           ADC10CTL0 &= ~ADC10MSC;        // Single Sequence
+   \   00000A   B2C080000007 BIC.W   #0x80, &0x700
+     50           ADC10CTL0 |= ADC10ON;          // ADC ON - Core Enabled
+   \   000010   B2D010000007 BIS.W   #0x10, &0x700
+     51           
+     52           ADC10CTL1 = RESET_STATE;       // Clear ADC10CTL1
+   \   000016   82430207     MOV.W   #0x0, &0x702
+     53           ADC10CTL1 |= ADC10SHS_0;       // ADC10SC bit
+   \   00001A   924202070207 MOV.W   &0x702, &0x702
+     54           ADC10CTL1 |= ADC10SHP;         // SAMPCON signal sourced from sampling timer
+   \   000020   B2D000020207 BIS.W   #0x200, &0x702
+     55           ADC10CTL1 &= ~ADC10ISSH;       // The sample-input signal is not inverted.
+   \   000026   B2C000010207 BIC.W   #0x100, &0x702
+     56           ADC10CTL1 |= ADC10DIV_0;       // ADC10_B clock divider – Divide by 1.
+   \   00002C   924202070207 MOV.W   &0x702, &0x702
+     57           ADC10CTL1 |= ADC10SSEL_0;      // MODCLK
+   \   000032   924202070207 MOV.W   &0x702, &0x702
+     58           ADC10CTL1 |= ADC10CONSEQ_0;    // Single-channel, single-conversion
+   \   000038   924202070207 MOV.W   &0x702, &0x702
+     59           
+     60           ADC10CTL2 = RESET_STATE;       // Clear ADC10CTL2
+   \   00003E   82430407     MOV.W   #0x0, &0x704
+     61           ADC10CTL2 |= ADC10DIV_0;       // Pre-divide by 1
+   \   000042   924204070407 MOV.W   &0x704, &0x704
+     62           ADC10CTL2 |= ADC10RES;         // 10-bit resolution
+   \   000048   B2D010000407 BIS.W   #0x10, &0x704
+     63           ADC10CTL2 &= ~ADC10DF;         // Binary unsigned
+   \   00004E   B2C20407     BIC.W   #0x8, &0x704
+     64           ADC10CTL2 &= ~ADC10SR;         // supports up to approximately 200 ksps
+   \   000052   A2C20407     BIC.W   #0x4, &0x704
+     65           
+     66           ADC10MCTL0 = RESET_STATE;      // Clear ADC10MCTL0
+   \   000056   82430A07     MOV.W   #0x0, &0x70a
+     67           ADC10MCTL0 |= ADC10SREF_0;     // V(R+) = AVCC and V(R-) = AVSS
+   \   00005A   92420A070A07 MOV.W   &0x70a, &0x70a
+     68           ADC10MCTL0 |= ADC10INCH_3;     // Channel A3 Thumb Wheel
+   \   000060   B2D003000A07 BIS.W   #0x3, &0x70a
+     69           ADC10IE |= ADC10IE0;           // Enable ADC conversion complete interrupt
+   \   000066   92D31A07     BIS.W   #0x1, &0x71a
+     70          }
+   \   00006A   1001         RETA
+   \   00006C                REQUIRE _A_ADC10CTL0_L
+   \   00006C                REQUIRE _A_ADC10CTL1_L
+   \   00006C                REQUIRE _A_ADC10CTL2_L
+   \   00006C                REQUIRE _A_ADC10MCTL0_L
+   \   00006C                REQUIRE _A_ADC10IE_L
+     71          //------------------------------------------------------------------------------
+     72          
+     73          //------------------------------------------------------------------------------
+     74          // ADC10 interrupt service routine
+     75          // ADC_Right_Detector; // A00 ADC10INCH_0 - P1.0
+     76          // ADC_Left_Detector; // A01 ADC10INCH_1 - P1.1
+     77          // ADC_Thumb; // A03 ADC10INCH_3 - P1.3
+     78          // ADC_Temp; // A10 ADC10INCH_10 – Temperature REF module
+     79          // ADC_Bat; // A11 ADC10INCH_11 - Internal
+     80          #pragma vector=ADC10_VECTOR
+
+   \                                 In  segment ISR_CODE, align 2
+     81          __interrupt void ADC10_ISR(void){
+   \                     ADC10_ISR:
+   \   000000   0F12         PUSH.W  R15
+     82           switch(__even_in_range(ADC10IV,12)) {
+   \   000002   1F421E07     MOV.W   &0x71e, R15
+   \   000006   E00F         ADDA    R15, PC
+   \                     `?<Jumptable for ADC10_ISR>_0`:
+   \   000008   2D3C         JMP     ??ADC10_ISR_1
+   \   00000A   2C3C         JMP     ??ADC10_ISR_1
+   \   00000C   2B3C         JMP     ??ADC10_ISR_1
+   \   00000E   2A3C         JMP     ??ADC10_ISR_1
+   \   000010   293C         JMP     ??ADC10_ISR_1
+   \   000012   283C         JMP     ??ADC10_ISR_1
+   \   000014   003C         JMP     ??ADC10_ISR_5
+     83           case 0: break; // No interrupt
+     84           case 2: break; // conversion result overflow
+     85           case 4: break; // conversion time overflow
+     86           case 6: break; // ADC10HI
+     87           case 8: break; // ADC10LO
+     88           case 10: break; // ADC10IN
+     89           case 12:
+     90             ADC10CTL0 &= ~ADC10ENC; // Turn off the ENC bit of the ADC10CTL0
+   \                     ??ADC10_ISR_5:
+   \   000016   A2C30007     BIC.W   #0x2, &0x700
+     91             switch (ADC_Channel){ // variable of the current active channel and increment each time through case statement
+   \   00001A   1F42....     MOV.W   &ADC_Channel, R15
+   \   00001E   0F83         SUB.W   #0x0, R15
+   \   000020   0524         JEQ     ??ADC10_ISR_2
+   \   000022   1F83         SUB.W   #0x1, R15
+   \   000024   0B24         JEQ     ??ADC10_ISR_3
+   \   000026   1F83         SUB.W   #0x1, R15
+   \   000028   1224         JEQ     ??ADC10_ISR_4
+   \   00002A   183C         JMP     ??ADC10_ISR_0
+     92             case 0x00: // channel A0
+     93             ADC10MCTL0 = ADC10INCH_1; // Next channel A1
+   \                     ??ADC10_ISR_2:
+   \   00002C   92430A07     MOV.W   #0x1, &0x70a
+     94             ADC_Right_Detector = ADC10MEM0; // Current Channel result for A0
+   \   000030   92421207.... MOV.W   &0x712, &ADC_Right_Detector
+     95             ADC_Channel++;
+   \   000036   9253....     ADD.W   #0x1, &ADC_Channel
+     96             break;
+   \   00003A   103C         JMP     ??ADC10_ISR_0
+     97             case 0x01: // channel A1
+     98             ADC10MCTL0 = ADC10INCH_3; // Next channel A3
+   \                     ??ADC10_ISR_3:
+   \   00003C   B24003000A07 MOV.W   #0x3, &0x70a
+     99             ADC_Left_Detector = ADC10MEM0; // Current Channel result for A1
+   \   000042   92421207.... MOV.W   &0x712, &ADC_Left_Detector
+    100             ADC_Channel++;
+   \   000048   9253....     ADD.W   #0x1, &ADC_Channel
+    101             break;
+   \   00004C   073C         JMP     ??ADC10_ISR_0
+    102             case 0x02: // channel A3
+    103             ADC10MCTL0 = ADC10INCH_0; // Next channel A0 (case 0x00)
+   \                     ??ADC10_ISR_4:
+   \   00004E   82430A07     MOV.W   #0x0, &0x70a
+    104             ADC_Thumb = ADC10MEM0; // Current Channel result for A3
+   \   000052   92421207.... MOV.W   &0x712, &ADC_Thumb
+    105             ADC_Channel = 0;
+   \   000058   8243....     MOV.W   #0x0, &ADC_Channel
+    106             break;
+    107             default:
+    108             break;
+    109            }
+    110            ADC10CTL0 |= ADC10ENC; // Turn on the ENC bit of the ADC10CTL0
+   \                     ??ADC10_ISR_0:
+   \   00005C   A2D30007     BIS.W   #0x2, &0x700
+    111            ADC10CTL0 |= ADC10SC; // Start next sample.
+   \   000060   92D30007     BIS.W   #0x1, &0x700
+    112            break;
+    113           default: break;
+    114           }
+    115          }
+   \                     ??ADC10_ISR_1:
+   \   000064   3F41         POP.W   R15
+   \   000066   0013         RETI
+   \   000068                REQUIRE _A_ADC10CTL0_L
+   \   000068                REQUIRE _A_ADC10MCTL0_L
+   \   000068                REQUIRE _A_ADC10MEM0_L
+   \   000068                REQUIRE _A_ADC10IV_L
+    116          //------------------------------------------------------------------------------
+    117          
+    118          //------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+    119          void ADC_Process(void){
+   \                     ADC_Process:
+   \                     ??ADC_Process_0:
+    120           while (ADC10CTL1 & BUSY); // Wait if ADC10 core is active
+   \   000000   92B30207     BIT.W   #0x1, &0x702
+   \   000004   FD2F         JC      ??ADC_Process_0
+    121           ADC10CTL0 |= ADC10ENC + ADC10SC; // Sampling and conversion start
+   \   000006   B2D003000007 BIS.W   #0x3, &0x700
+    122          }
+   \   00000C   1001         RETA
+   \   00000E                REQUIRE _A_ADC10CTL1_L
+   \   00000E                REQUIRE _A_ADC10CTL0_L
+    123          //------------------------------------------------------------------------------
+    124          
+    125          
+    126          //------------------------------------------------------------------------------
+
+   \                                 In  segment CODE, align 2
+    127          void dec_to_char(int value) {
+   \                     dec_to_char:
+    128            int count = 0;
+   \   000000   0F43         MOV.W   #0x0, R15
+    129            int current_array = 0;
+   \   000002   0E43         MOV.W   #0x0, R14
+    130            while (value >= 10000) {
+   \                     ??dec_to_char_0:
+   \   000004   3C901027     CMP.W   #0x2710, R12
+   \   000008   0438         JL      ??dec_to_char_4
+    131              value = value - 10000;
+   \   00000A   3C50F0D8     ADD.W   #0xd8f0, R12
+    132              count ++;
+   \   00000E   1F53         ADD.W   #0x1, R15
+   \   000010   F93F         JMP     ??dec_to_char_0
+    133            }
+    134            msec_display[current_array] = 0x30 + count;
+   \                     ??dec_to_char_4:
+   \   000012   0D12         PUSH.W  R13
+   \   000014   C14F0000     MOV.B   R15, 0(SP)
+   \   000018   3D41         POP.W   R13
+   \   00001A   7D503000     ADD.B   #0x30, R13
+   \   00001E   CE4D....     MOV.B   R13, msec_display(R14)
+    135            current_array++;
+   \   000022   1E53         ADD.W   #0x1, R14
+    136            count = 0;
+   \   000024   0F43         MOV.W   #0x0, R15
+    137            while (value >= 1000) {
+   \                     ??dec_to_char_1:
+   \   000026   3C90E803     CMP.W   #0x3e8, R12
+   \   00002A   0438         JL      ??dec_to_char_5
+    138              value = value - 1000;
+   \   00002C   3C5018FC     ADD.W   #0xfc18, R12
+    139              count++;
+   \   000030   1F53         ADD.W   #0x1, R15
+   \   000032   F93F         JMP     ??dec_to_char_1
+    140            }
+    141            msec_display[current_array] = 0x30 + count;
+   \                     ??dec_to_char_5:
+   \   000034   0D12         PUSH.W  R13
+   \   000036   C14F0000     MOV.B   R15, 0(SP)
+   \   00003A   3D41         POP.W   R13
+   \   00003C   7D503000     ADD.B   #0x30, R13
+   \   000040   CE4D....     MOV.B   R13, msec_display(R14)
+    142            current_array++;
+   \   000044   1E53         ADD.W   #0x1, R14
+    143            count = 0;
+   \   000046   0F43         MOV.W   #0x0, R15
+    144            while (value >= 100) {
+   \                     ??dec_to_char_2:
+   \   000048   3C906400     CMP.W   #0x64, R12
+   \   00004C   0438         JL      ??dec_to_char_6
+    145              value = value - 100;
+   \   00004E   3C509CFF     ADD.W   #0xff9c, R12
+    146              count++;
+   \   000052   1F53         ADD.W   #0x1, R15
+   \   000054   F93F         JMP     ??dec_to_char_2
+    147            }
+    148            msec_display[current_array] = 0x30 + count;
+   \                     ??dec_to_char_6:
+   \   000056   0D12         PUSH.W  R13
+   \   000058   C14F0000     MOV.B   R15, 0(SP)
+   \   00005C   3D41         POP.W   R13
+   \   00005E   7D503000     ADD.B   #0x30, R13
+   \   000062   CE4D....     MOV.B   R13, msec_display(R14)
+    149            current_array++;
+   \   000066   1E53         ADD.W   #0x1, R14
+    150            count = 0;
+   \   000068   0F43         MOV.W   #0x0, R15
+    151            while (value >= 10) {
+   \                     ??dec_to_char_3:
+   \   00006A   3C900A00     CMP.W   #0xa, R12
+   \   00006E   0438         JL      ??dec_to_char_7
+    152              value = value - 10;
+   \   000070   3C50F6FF     ADD.W   #0xfff6, R12
+    153              count++;
+   \   000074   1F53         ADD.W   #0x1, R15
+   \   000076   F93F         JMP     ??dec_to_char_3
+    154            }
+    155            msec_display[current_array] = 0x30 + count;
+   \                     ??dec_to_char_7:
+   \   000078   0D12         PUSH.W  R13
+   \   00007A   C14F0000     MOV.B   R15, 0(SP)
+   \   00007E   3D41         POP.W   R13
+   \   000080   7D503000     ADD.B   #0x30, R13
+   \   000084   CE4D....     MOV.B   R13, msec_display(R14)
+    156            current_array++;
+   \   000088   1E53         ADD.W   #0x1, R14
+    157            if ((value <= 9) && (value >= 0)) {
+   \   00008A   3C900A00     CMP.W   #0xa, R12
+   \   00008E   0A34         JGE     ??dec_to_char_8
+   \   000090   0C93         CMP.W   #0x0, R12
+   \   000092   0838         JL      ??dec_to_char_8
+    158              msec_display[current_array] = 0x30 + value;
+   \   000094   0D12         PUSH.W  R13
+   \   000096   C14C0000     MOV.B   R12, 0(SP)
+   \   00009A   3D41         POP.W   R13
+   \   00009C   7D503000     ADD.B   #0x30, R13
+   \   0000A0   CE4D....     MOV.B   R13, msec_display(R14)
+    159            }      
+    160          }
+   \                     ??dec_to_char_8:
+   \   0000A4   1001         RETA
+    161            
+
+   \                                 In  segment CODE, align 2
+    162          void offload_num(char data[]){
+   \                     offload_num:
+    163              
+    164              for(int i = 0; i<6; i++){
+   \   000000   0E43         MOV.W   #0x0, R14
+   \                     ??offload_num_0:
+   \   000002   3E900600     CMP.W   #0x6, R14
+   \   000006   0734         JGE     ??offload_num_1
+    165              
+    166              data[i] = msec_display[i];
+   \   000008   0F4C         MOV.W   R12, R15
+   \   00000A   0F5E         ADD.W   R14, R15
+   \   00000C   DF4E....0000 MOV.B   msec_display(R14), 0(R15)
+    167          }
+   \   000012   1E53         ADD.W   #0x1, R14
+   \   000014   F63F         JMP     ??offload_num_0
+    168            
+    169          }
+   \                     ??offload_num_1:
+   \   000016   1001         RETA
+
+   \                                 In  segment INTVEC, offset 0x5c, root
+   \                     `??ADC10_ISR::??INTVEC 92`:
+   \   00005C   ....         DC16    ADC10_ISR
+    170          
+    171          /*
+    172          //ADC10INCH_0 is for Channel A0 Which signal is connected to the A0 pin?
+    173          //ADC10INCH_1 is for Channel A1 Which signal is connected to the A1 pin?
+    174          //ADC10INCH_3 is for Channel A3 Which signal is connected to the A3 pin?
+    175          case 12:
+    176          // Need this to change the ADC10INCH_x value.
+    177           ADC10CTL0 &= ~ADC10ENC; // Turn off the ENC bit of the ADC10CTL0
+    178           switch (variable of the current active channel and increment each time through case statement){
+    179           case 0x00:
+    180           ADC10MCTL0 = ADC10INCH_1; // Next channel A1
+    181           (Channel A0 variable) = ADC10MEM0; // Current Channel result for A0
+    182           break;
+    183           case 0x01:
+    184           ADC10MCTL0 = ADC10INCH_3; // Next channel A3
+    185           (Channel A1 variable) = ADC10MEM0; // Current Channel result for A1
+    186           break;
+    187           case 0x02:
+    188           ADC10MCTL0 = ADC10INCH_0; // Next channel A0
+    189           (Channel A3 variable) = ADC10MEM0; // Current Channel result for A3
+    190           Channel count value needs to be set back to 0;
+    191           break;
+    192           default:
+    193           break;
+    194          }
+    195          ADC10CTL0 |= _______; // Turn on the ENC bit of the ADC10CTL0
+    196          ADC10CTL0 |= _______; // Start next sample.
+    197          break;
+    198          */
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      6   ADC10_ISR
+      4   ADC_Process
+      4   Init_ADC
+      6   dec_to_char
+      4   offload_num
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+     104  ADC10_ISR
+       2  ADC10_ISR::??INTVEC 92
+      14  ADC_Process
+     108  Init_ADC
+       2  _A_ADC10CTL0_L
+       2  _A_ADC10CTL1_L
+       2  _A_ADC10CTL2_L
+       2  _A_ADC10IE_L
+       2  _A_ADC10IV_L
+       2  _A_ADC10MCTL0_L
+       2  _A_ADC10MEM0_L
+     166  dec_to_char
+      24  offload_num
+
+ 
+ 312 bytes in segment CODE
+  14 bytes in segment DATA16_AN
+   2 bytes in segment INTVEC
+ 104 bytes in segment ISR_CODE
+ 
+ 416 bytes of CODE  memory
+   0 bytes of CONST memory (+  2 bytes shared)
+   0 bytes of DATA  memory (+ 14 bytes shared)
+
+Errors: none
+Warnings: none

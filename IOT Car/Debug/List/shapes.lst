@@ -1,0 +1,395 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V6.40.1.950/W32 for MSP430           25/Feb/2016  14:33:13
+# Copyright 1996-2015 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.40
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  C:\Users\Smitty\Dropbox\ncsu\ece306\Project4\shapes.c
+#    Command line  =  
+#        C:\Users\Smitty\Dropbox\ncsu\ece306\Project4\shapes.c -lC
+#        C:\Users\Smitty\Dropbox\ncsu\ece306\Project4\Debug\List -o
+#        C:\Users\Smitty\Dropbox\ncsu\ece306\Project4\Debug\Obj --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5739__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 7.3\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large
+#    List file     =  
+#        C:\Users\Smitty\Dropbox\ncsu\ece306\Project4\Debug\List\shapes.lst
+#    Object file   =  
+#        C:\Users\Smitty\Dropbox\ncsu\ece306\Project4\Debug\Obj\shapes.r43
+#
+###############################################################################
+
+C:\Users\Smitty\Dropbox\ncsu\ece306\Project4\shapes.c
+      1          //------------------------------------------------------------------------------
+      2          //
+      3          //  Description: This file contains the functions for the car creating shapes using
+      4          //               movement functions from wheels.c
+      5          //
+      6          //
+      7          //  Calvin Schmidt
+      8          //  Feb 2016
+      9          //  Built with IAR Embedded Workbench Version: V7.3.1.3987 (6.40.1)
+     10          //------------------------------------------------------------------------------
+     11          
+     12          #include  "msp430.h"
+     13          #include  "functions.h"
+     14          #include  "macros.h"
+     15          
+
+   \                                 In  segment CODE, align 2
+     16          void Triangle(void) {
+   \                     Triangle:
+     17          //------------------------------------------------------------------------------
+     18          //
+     19          // Description: Causes the car to make a triangle shape twice
+     20          //
+     21          // Passed: No variables passed
+     22          // Locals: No local variables
+     23          // Returned: No values returned
+     24          //  
+     25          //
+     26          //  Calvin Schmidt
+     27          //  Feb 2016
+     28          //  Built with IAR Embedded Workbench Version: V7.3.1.3987 (6.40.1)
+     29          //------------------------------------------------------------------------------
+     30            five_msec_sleep(TWOSECOND); // delay for user to remove hands from car
+   \   000000   3C408C00     MOV.W   #0x8c, R12
+   \   000004   ........     CALLA   #five_msec_sleep
+     31            // first triangle
+     32            Short_Segment_Forward();
+   \   000008   ........     CALLA   #Short_Segment_Forward
+     33            Quarter_Turn_Left();
+   \   00000C   ........     CALLA   #Quarter_Turn_Left
+     34            Short_Segment_Forward();
+   \   000010   ........     CALLA   #Short_Segment_Forward
+     35            Short_Segment_Forward();
+   \   000014   ........     CALLA   #Short_Segment_Forward
+     36            Quarter_Turn_Left();
+   \   000018   ........     CALLA   #Quarter_Turn_Left
+     37            Short_Segment_Forward();
+   \   00001C   ........     CALLA   #Short_Segment_Forward
+     38            Short_Segment_Forward();
+   \   000020   ........     CALLA   #Short_Segment_Forward
+     39            Quarter_Turn_Left();
+   \   000024   ........     CALLA   #Quarter_Turn_Left
+     40            Short_Segment_Forward();
+   \   000028   ........     CALLA   #Short_Segment_Forward
+     41            // second triangle
+     42            Short_Segment_Forward();
+   \   00002C   ........     CALLA   #Short_Segment_Forward
+     43            Quarter_Turn_Left();
+   \   000030   ........     CALLA   #Quarter_Turn_Left
+     44            Short_Segment_Forward();
+   \   000034   ........     CALLA   #Short_Segment_Forward
+     45            Short_Segment_Forward();
+   \   000038   ........     CALLA   #Short_Segment_Forward
+     46            Quarter_Turn_Left();
+   \   00003C   ........     CALLA   #Quarter_Turn_Left
+     47            Short_Segment_Forward();
+   \   000040   ........     CALLA   #Short_Segment_Forward
+     48            Short_Segment_Forward();
+   \   000044   ........     CALLA   #Short_Segment_Forward
+     49            Quarter_Turn_Left();
+   \   000048   ........     CALLA   #Quarter_Turn_Left
+     50            Short_Segment_Forward();
+   \   00004C   ........     BRA     #Short_Segment_Forward
+     51          }
+     52          
+
+   \                                 In  segment CODE, align 2
+     53          void Circle(void) {
+   \                     Circle:
+   \   000000   0A12         PUSH.W  R10
+     54          //------------------------------------------------------------------------------
+     55          //
+     56          // Description: Causes the car to make two circles
+     57          //
+     58          // CIRCLESTART  (1)
+     59          // ENDOFCIRCLE  (30)
+     60          //
+     61          // Passed: No variables passed
+     62          // Locals: No local variables
+     63          // Returned: No values returned
+     64          //  
+     65          //
+     66          //  Calvin Schmidt
+     67          //  Feb 2016
+     68          //  Built with IAR Embedded Workbench Version: V7.3.1.3987 (6.40.1)
+     69          //------------------------------------------------------------------------------
+     70            five_msec_sleep(TWOSECOND); // delay for user to remove hands from car
+   \   000002   3C408C00     MOV.W   #0x8c, R12
+   \   000006   ........     CALLA   #five_msec_sleep
+     71            // first circle
+     72            Left_Wheel_Forward();
+   \   00000A   ........     CALLA   #Left_Wheel_Forward
+     73            Right_Wheel_Forward();
+   \   00000E   ........     CALLA   #Right_Wheel_Forward
+     74            // loop for varying left wheel speed
+     75            int i;
+     76            for (i=CIRCLESTART; i<ENDOFCIRCLE; i++) {
+   \   000012   1A43         MOV.W   #0x1, R10
+   \                     ??Circle_0:
+   \   000014   3A901E00     CMP.W   #0x1e, R10
+   \   000018   0D34         JGE     ??Circle_2
+     77            five_msec_sleep(TENMSEC); // wheel is on for 10 msec
+   \   00001A   2C43         MOV.W   #0x2, R12
+   \   00001C   ........     CALLA   #five_msec_sleep
+     78            Left_Wheel_Off();
+   \   000020   ........     CALLA   #Left_Wheel_Off
+     79            five_msec_sleep(FIFTYMSEC); // wheel is off for 50 msec
+   \   000024   3C400A00     MOV.W   #0xa, R12
+   \   000028   ........     CALLA   #five_msec_sleep
+     80            Left_Wheel_Forward();
+   \   00002C   ........     CALLA   #Left_Wheel_Forward
+     81            }
+   \   000030   1A53         ADD.W   #0x1, R10
+   \   000032   F03F         JMP     ??Circle_0
+     82            // turn off both wheels after loop
+     83            Left_Wheel_Off();
+   \                     ??Circle_2:
+   \   000034   ........     CALLA   #Left_Wheel_Off
+     84            Right_Wheel_Off();
+   \   000038   ........     CALLA   #Right_Wheel_Off
+     85            
+     86            // second circle
+     87            Left_Wheel_Forward();
+   \   00003C   ........     CALLA   #Left_Wheel_Forward
+     88            Right_Wheel_Forward();
+   \   000040   ........     CALLA   #Right_Wheel_Forward
+     89            // loop for varying left wheel speed
+     90            for (i=CIRCLESTART; i<ENDOFCIRCLE; i++) {
+   \   000044   1A43         MOV.W   #0x1, R10
+   \                     ??Circle_1:
+   \   000046   3A901E00     CMP.W   #0x1e, R10
+   \   00004A   0D34         JGE     ??Circle_3
+     91            five_msec_sleep(TENMSEC); // wheel is on for 10 msec
+   \   00004C   2C43         MOV.W   #0x2, R12
+   \   00004E   ........     CALLA   #five_msec_sleep
+     92            Left_Wheel_Off();
+   \   000052   ........     CALLA   #Left_Wheel_Off
+     93            five_msec_sleep(FIFTYMSEC); // wheel is off for 50 msec
+   \   000056   3C400A00     MOV.W   #0xa, R12
+   \   00005A   ........     CALLA   #five_msec_sleep
+     94            Left_Wheel_Forward();
+   \   00005E   ........     CALLA   #Left_Wheel_Forward
+     95            }
+   \   000062   1A53         ADD.W   #0x1, R10
+   \   000064   F03F         JMP     ??Circle_1
+     96            // turn off both wheels after loop
+     97            Left_Wheel_Off();
+   \                     ??Circle_3:
+   \   000066   ........     CALLA   #Left_Wheel_Off
+     98            Right_Wheel_Off();
+   \   00006A   ........     CALLA   #Right_Wheel_Off
+     99            
+    100          }
+   \   00006E   3A41         POP.W   R10
+   \   000070   1001         RETA
+    101          
+
+   \                                 In  segment CODE, align 2
+    102          void Figure_Eight(void) {
+   \                     Figure_Eight:
+   \   000000   0A12         PUSH.W  R10
+    103          //------------------------------------------------------------------------------
+    104          //
+    105          // Description: Causes the car to make two figure eights
+    106          //
+    107          // CIRCLESTART  (1)
+    108          // ENDOFCIRCLE  (30)
+    109          // SECONDCIRCLE (38)
+    110          // THIRDCIRCLE  (32)
+    111          //
+    112          // Passed: No variables passed
+    113          // Locals: No local variables
+    114          // Returned: No values returned
+    115          //  
+    116          //
+    117          //  Calvin Schmidt
+    118          //  Feb 2016
+    119          //  Built with IAR Embedded Workbench Version: V7.3.1.3987 (6.40.1)
+    120          //------------------------------------------------------------------------------
+    121            five_msec_sleep(TWOSECOND); // delay for user to remove hands from car
+   \   000002   3C408C00     MOV.W   #0x8c, R12
+   \   000006   ........     CALLA   #five_msec_sleep
+    122            // first figure8 first circle
+    123            Left_Wheel_Forward();
+   \   00000A   ........     CALLA   #Left_Wheel_Forward
+    124            Right_Wheel_Forward();
+   \   00000E   ........     CALLA   #Right_Wheel_Forward
+    125            // loop for varying left wheel speed
+    126            int i;
+    127            for (i=CIRCLESTART; i<ENDOFCIRCLE; i++) {
+   \   000012   1A43         MOV.W   #0x1, R10
+   \                     ??Figure_Eight_0:
+   \   000014   3A901E00     CMP.W   #0x1e, R10
+   \   000018   0D34         JGE     ??Figure_Eight_4
+    128            five_msec_sleep(TENMSEC);
+   \   00001A   2C43         MOV.W   #0x2, R12
+   \   00001C   ........     CALLA   #five_msec_sleep
+    129            Left_Wheel_Off();
+   \   000020   ........     CALLA   #Left_Wheel_Off
+    130            five_msec_sleep(FIFTYMSEC);
+   \   000024   3C400A00     MOV.W   #0xa, R12
+   \   000028   ........     CALLA   #five_msec_sleep
+    131            Left_Wheel_Forward();
+   \   00002C   ........     CALLA   #Left_Wheel_Forward
+    132            }
+   \   000030   1A53         ADD.W   #0x1, R10
+   \   000032   F03F         JMP     ??Figure_Eight_0
+    133            // turn off both wheels after loop
+    134            Left_Wheel_Off();
+   \                     ??Figure_Eight_4:
+   \   000034   ........     CALLA   #Left_Wheel_Off
+    135            Right_Wheel_Off();
+   \   000038   ........     CALLA   #Right_Wheel_Off
+    136            
+    137            // first figure8 second circle
+    138            Left_Wheel_Forward();
+   \   00003C   ........     CALLA   #Left_Wheel_Forward
+    139            Right_Wheel_Forward();
+   \   000040   ........     CALLA   #Right_Wheel_Forward
+    140            // loop for varying left wheel speed
+    141            for (i=CIRCLESTART; i<SECONDCIRCLE; i++) {
+   \   000044   1A43         MOV.W   #0x1, R10
+   \                     ??Figure_Eight_1:
+   \   000046   3A902600     CMP.W   #0x26, R10
+   \   00004A   0D34         JGE     ??Figure_Eight_5
+    142            five_msec_sleep(TENMSEC);
+   \   00004C   2C43         MOV.W   #0x2, R12
+   \   00004E   ........     CALLA   #five_msec_sleep
+    143            Right_Wheel_Off();
+   \   000052   ........     CALLA   #Right_Wheel_Off
+    144            five_msec_sleep(FIFTYMSEC);
+   \   000056   3C400A00     MOV.W   #0xa, R12
+   \   00005A   ........     CALLA   #five_msec_sleep
+    145            Right_Wheel_Forward();
+   \   00005E   ........     CALLA   #Right_Wheel_Forward
+    146            }
+   \   000062   1A53         ADD.W   #0x1, R10
+   \   000064   F03F         JMP     ??Figure_Eight_1
+    147            // turn off both wheels after loop
+    148            Left_Wheel_Off();
+   \                     ??Figure_Eight_5:
+   \   000066   ........     CALLA   #Left_Wheel_Off
+    149            Right_Wheel_Off();
+   \   00006A   ........     CALLA   #Right_Wheel_Off
+    150            // end of first figure 8
+    151            
+    152            // second figure8 first circle
+    153            Left_Wheel_Forward();
+   \   00006E   ........     CALLA   #Left_Wheel_Forward
+    154            Right_Wheel_Forward();
+   \   000072   ........     CALLA   #Right_Wheel_Forward
+    155            // loop for varying left wheel speed
+    156            for (i=CIRCLESTART; i<THIRDCIRCLE; i++) {
+   \   000076   1A43         MOV.W   #0x1, R10
+   \                     ??Figure_Eight_2:
+   \   000078   3A902000     CMP.W   #0x20, R10
+   \   00007C   0D34         JGE     ??Figure_Eight_6
+    157            five_msec_sleep(TENMSEC);
+   \   00007E   2C43         MOV.W   #0x2, R12
+   \   000080   ........     CALLA   #five_msec_sleep
+    158            Left_Wheel_Off();
+   \   000084   ........     CALLA   #Left_Wheel_Off
+    159            five_msec_sleep(FIFTYMSEC);
+   \   000088   3C400A00     MOV.W   #0xa, R12
+   \   00008C   ........     CALLA   #five_msec_sleep
+    160            Left_Wheel_Forward();
+   \   000090   ........     CALLA   #Left_Wheel_Forward
+    161            }
+   \   000094   1A53         ADD.W   #0x1, R10
+   \   000096   F03F         JMP     ??Figure_Eight_2
+    162            // turn off both wheels after loop
+    163            Left_Wheel_Off();
+   \                     ??Figure_Eight_6:
+   \   000098   ........     CALLA   #Left_Wheel_Off
+    164            Right_Wheel_Off();
+   \   00009C   ........     CALLA   #Right_Wheel_Off
+    165            
+    166            // second figure8 second circle
+    167            Left_Wheel_Forward();
+   \   0000A0   ........     CALLA   #Left_Wheel_Forward
+    168            Right_Wheel_Forward();
+   \   0000A4   ........     CALLA   #Right_Wheel_Forward
+    169            // loop for varying left wheel speed
+    170            for (i=CIRCLESTART; i<ENDOFCIRCLE; i++) {
+   \   0000A8   1A43         MOV.W   #0x1, R10
+   \                     ??Figure_Eight_3:
+   \   0000AA   3A901E00     CMP.W   #0x1e, R10
+   \   0000AE   0D34         JGE     ??Figure_Eight_7
+    171            five_msec_sleep(TENMSEC);
+   \   0000B0   2C43         MOV.W   #0x2, R12
+   \   0000B2   ........     CALLA   #five_msec_sleep
+    172            Right_Wheel_Off();
+   \   0000B6   ........     CALLA   #Right_Wheel_Off
+    173            five_msec_sleep(FIFTYMSEC);
+   \   0000BA   3C400A00     MOV.W   #0xa, R12
+   \   0000BE   ........     CALLA   #five_msec_sleep
+    174            Right_Wheel_Forward();
+   \   0000C2   ........     CALLA   #Right_Wheel_Forward
+    175            }
+   \   0000C6   1A53         ADD.W   #0x1, R10
+   \   0000C8   F03F         JMP     ??Figure_Eight_3
+    176            // turn off both wheels after loop
+    177            Left_Wheel_Off();
+   \                     ??Figure_Eight_7:
+   \   0000CA   ........     CALLA   #Left_Wheel_Off
+    178            Right_Wheel_Off();
+   \   0000CE   ........     CALLA   #Right_Wheel_Off
+    179            // end of second figure8
+    180          }
+   \   0000D2   3A41         POP.W   R10
+   \   0000D4   1001         RETA
+    181          
+    182          
+    183          
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      6   Circle
+        6   -> Left_Wheel_Forward
+        6   -> Left_Wheel_Off
+        6   -> Right_Wheel_Forward
+        6   -> Right_Wheel_Off
+        6   -> five_msec_sleep
+      6   Figure_Eight
+        6   -> Left_Wheel_Forward
+        6   -> Left_Wheel_Off
+        6   -> Right_Wheel_Forward
+        6   -> Right_Wheel_Off
+        6   -> five_msec_sleep
+      4   Triangle
+        4   -> Quarter_Turn_Left
+        0   -> Short_Segment_Forward
+        4   -> Short_Segment_Forward
+        4   -> five_msec_sleep
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+     114  Circle
+     214  Figure_Eight
+      80  Triangle
+
+ 
+ 408 bytes in segment CODE
+ 
+ 408 bytes of CODE memory
+
+Errors: none
+Warnings: none

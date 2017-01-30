@@ -1,0 +1,117 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V6.40.1.950/W32 for MSP430           20/Apr/2016  15:43:39
+# Copyright 1996-2015 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.40
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\switch.c
+#    Command line  =  
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\switch.c -lC
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\Debug\List -o
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\Debug\Obj --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5739__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 7.3\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large
+#    List file     =  
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\Debug\List\switch.lst
+#    Object file   =  
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\Debug\Obj\switch.r43
+#
+###############################################################################
+
+C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\switch.c
+      1          //------------------------------------------------------------------------------
+      2          //
+      3          //  Description: This file contains the function which makes the buttons write 
+      4          //               different strings to the display
+      5          //
+      6          //
+      7          //  Calvin Schmidt
+      8          //  Feb 2016
+      9          //  Built with IAR Embedded Workbench Version: V7.3.1.3987 (6.40.1)
+     10          //------------------------------------------------------------------------------
+     11          
+     12          //------------------------------------------------------------------------------
+     13          
+     14          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x220
+   \   union <unnamed> _A_PBIN_L
+   \                     _A_PBIN_L:
+   \   000000                DS8 2
+     15          #include  "functions.h"
+     16          #include  "macros.h"
+     17          
+     18          extern char *display_1;
+     19          extern char *display_2;
+     20          extern char *display_3;
+     21          extern char *display_4;
+     22          extern char posL1;
+     23          extern char posL2;
+     24          extern char posL3;
+     25          extern char posL4;
+     26          extern volatile unsigned int counter;
+     27          
+
+   \                                 In  segment CODE, align 2
+     28          void Switches_Process(void){
+   \                     Switches_Process:
+     29          //------------------------------------------------------------------------------
+     30          //
+     31          //  Description: This function outputs alternate display messages when a switch is pressed
+     32          //               which corresponds to the shape that is currently running. Switch 1 cycles 
+     33          //               through the different shapes, and switch 2 selects that shape.
+     34          //  Macros:
+     35          //  CIRCLE      (1)
+     36          //  TRIANGLE    (2)
+     37          //  FIGUREEIGHT (3)
+     38          //
+     39          //  Calvin Schmidt
+     40          //  Feb 2016
+     41          //  Built with IAR Embedded Workbench Version: V7.3.1.3987 (6.40.1)
+     42          //------------------------------------------------------------------------------
+     43            
+     44            if (!(P4IN & SW1)){
+   \   000000   5E422102     MOV.B   &0x221, R14
+     45            }
+     46            if (!(P4IN & SW2)) {
+   \   000004   5F422102     MOV.B   &0x221, R15
+     47            }
+     48          //------------------------------------------------------------------------------
+     49          }
+   \   000008   1001         RETA
+   \   00000A                REQUIRE _A_PBIN_L
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Switches_Process
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      10  Switches_Process
+       2  _A_PBIN_L
+
+ 
+ 10 bytes in segment CODE
+  2 bytes in segment DATA16_AN
+ 
+ 10 bytes of CODE memory
+  0 bytes of DATA memory (+ 2 bytes shared)
+
+Errors: none
+Warnings: none

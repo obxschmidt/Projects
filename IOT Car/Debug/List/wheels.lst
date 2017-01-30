@@ -1,0 +1,190 @@
+###############################################################################
+#
+# IAR C/C++ Compiler V6.40.1.950/W32 for MSP430           20/Apr/2016  15:43:39
+# Copyright 1996-2015 IAR Systems AB.
+# Standalone license - IAR Embedded Workbench for Texas Instruments MSP430, 8K KickStart Edition 6.40
+#
+#    __rt_version  =  3
+#    __double_size =  32
+#    __reg_r4      =  free
+#    __reg_r5      =  free
+#    __pic         =  no
+#    __core        =  430X
+#    __data_model  =  small
+#    __code_model  =  large
+#    Source file   =  C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\wheels.c
+#    Command line  =  
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\wheels.c -lC
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\Debug\List -o
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\Debug\Obj --no_cse
+#        --no_unroll --no_inline --no_code_motion --no_tbaa --debug
+#        -D__MSP430FR5739__ -e --double=32 --dlib_config "C:\Program Files
+#        (x86)\IAR Systems\Embedded Workbench 7.3\430\lib\dlib\dl430xlsfn.h"
+#        --core=430X --data_model=small -On --multiplier=32
+#        --hw_workaround=CPU40 --code_model=large
+#    List file     =  
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\Debug\List\wheels.lst
+#    Object file   =  
+#        C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\Debug\Obj\wheels.r43
+#
+###############################################################################
+
+C:\Users\Calvin\Dropbox\ncsu\ece306\Project8\wheels.c
+      1          //------------------------------------------------------------------------------
+      2          //
+      3          //  Description: This file contains the functions for wheel movement
+      4          //
+      5          //
+      6          //  Calvin Schmidt
+      7          //  Feb 2016
+      8          //  Built with IAR Embedded Workbench Version: V7.3.1.3987 (6.40.1)
+      9          //------------------------------------------------------------------------------
+     10          
+     11          //------------------------------------------------------------------------------
+     12          #include  "msp430.h"
+
+   \                                 In  segment DATA16_AN, at 0x414
+   \   unsigned short volatile TB1CCR1
+   \                     TB1CCR1:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x416
+   \   unsigned short volatile TB1CCR2
+   \                     TB1CCR2:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x454
+   \   unsigned short volatile TB2CCR1
+   \                     TB2CCR1:
+   \   000000                DS8 2
+
+   \                                 In  segment DATA16_AN, at 0x456
+   \   unsigned short volatile TB2CCR2
+   \                     TB2CCR2:
+   \   000000                DS8 2
+     13          #include  "functions.h"
+     14          #include  "macros.h"
+     15          
+
+   \                                 In  segment CODE, align 2
+     16          void Left_Wheel_Forward(int left_forward_rate) {
+   \                     Left_Wheel_Forward:
+     17            Left_Wheel_Off();
+   \   000000   ........     CALLA   #Left_Wheel_Off
+     18            TB1CCR1 = left_forward_rate;
+   \   000004   824C1404     MOV.W   R12, &0x414
+     19          }
+   \   000008   1001         RETA
+   \   00000A                REQUIRE TB1CCR1
+     20          
+
+   \                                 In  segment CODE, align 2
+     21          void Left_Wheel_Reverse(int left_reverse_rate) {
+   \                     Left_Wheel_Reverse:
+     22            Left_Wheel_Off();
+   \   000000   ........     CALLA   #Left_Wheel_Off
+     23            TB1CCR2 = left_reverse_rate;
+   \   000004   824C1604     MOV.W   R12, &0x416
+     24          }
+   \   000008   1001         RETA
+   \   00000A                REQUIRE TB1CCR2
+     25          
+
+   \                                 In  segment CODE, align 2
+     26          void Right_Wheel_Forward(int right_forward_rate) {
+   \                     Right_Wheel_Forward:
+     27            Right_Wheel_Off();
+   \   000000   ........     CALLA   #Right_Wheel_Off
+     28            TB2CCR1 = right_forward_rate;
+   \   000004   824C5404     MOV.W   R12, &0x454
+     29          }
+   \   000008   1001         RETA
+   \   00000A                REQUIRE TB2CCR1
+     30          
+
+   \                                 In  segment CODE, align 2
+     31          void Right_Wheel_Reverse(int right_reverse_rate) {
+   \                     Right_Wheel_Reverse:
+     32            Right_Wheel_Off();
+   \   000000   ........     CALLA   #Right_Wheel_Off
+     33            TB2CCR2 = right_reverse_rate;
+   \   000004   824C5604     MOV.W   R12, &0x456
+     34          }
+   \   000008   1001         RETA
+   \   00000A                REQUIRE TB2CCR2
+     35          
+
+   \                                 In  segment CODE, align 2
+     36          void Left_Wheel_Off(void) {
+   \                     Left_Wheel_Off:
+     37            TB1CCR1 = CLEAR;
+   \   000000   82431404     MOV.W   #0x0, &0x414
+     38            TB1CCR2 = CLEAR; 
+   \   000004   82431604     MOV.W   #0x0, &0x416
+     39          }
+   \   000008   1001         RETA
+   \   00000A                REQUIRE TB1CCR1
+   \   00000A                REQUIRE TB1CCR2
+     40          
+
+   \                                 In  segment CODE, align 2
+     41          void Right_Wheel_Off(void) {
+   \                     Right_Wheel_Off:
+     42            TB2CCR1 = CLEAR;
+   \   000000   82435404     MOV.W   #0x0, &0x454
+     43            TB2CCR2 = CLEAR;
+   \   000004   82435604     MOV.W   #0x0, &0x456
+     44          }
+   \   000008   1001         RETA
+   \   00000A                REQUIRE TB2CCR1
+   \   00000A                REQUIRE TB2CCR2
+     45          
+     46          
+     47          
+     48          
+     49          
+     50          
+     51          
+     52          
+     53          
+
+   Maximum stack usage in bytes:
+
+   CSTACK Function
+   ------ --------
+      4   Left_Wheel_Forward
+        4   -> Left_Wheel_Off
+      4   Left_Wheel_Off
+      4   Left_Wheel_Reverse
+        4   -> Left_Wheel_Off
+      4   Right_Wheel_Forward
+        4   -> Right_Wheel_Off
+      4   Right_Wheel_Off
+      4   Right_Wheel_Reverse
+        4   -> Right_Wheel_Off
+
+
+   Segment part sizes:
+
+   Bytes  Function/Label
+   -----  --------------
+      10  Left_Wheel_Forward
+      10  Left_Wheel_Off
+      10  Left_Wheel_Reverse
+      10  Right_Wheel_Forward
+      10  Right_Wheel_Off
+      10  Right_Wheel_Reverse
+       2  TB1CCR1
+       2  TB1CCR2
+       2  TB2CCR1
+       2  TB2CCR2
+
+ 
+ 60 bytes in segment CODE
+  8 bytes in segment DATA16_AN
+ 
+ 60 bytes of CODE memory
+  0 bytes of DATA memory (+ 8 bytes shared)
+
+Errors: none
+Warnings: none
