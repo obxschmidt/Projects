@@ -1,0 +1,13 @@
+--cpu Cortex-M0+
+".\objects\delay.o"
+".\objects\leds.o"
+".\objects\main.o"
+".\objects\mma8451.o"
+".\objects\i2c_p1.o"
+".\objects\blinky.o"
+"C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\RTOS\RTX\LIB\ARM\RTX_CM0.lib"
+".\objects\rtx_conf_cm.o"
+".\objects\startup_mkl25z4.o"
+".\objects\system_mkl25z4.o"
+--strict --scatter ".\Objects\I2C-Demo.sct"
+--summary_stderr --info summarysizes -o .\Objects\I2C-Demo.axf
