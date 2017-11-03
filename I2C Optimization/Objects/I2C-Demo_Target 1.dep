@@ -1,0 +1,63 @@
+Dependencies for Project 'I2C-Demo', Target 'Target 1': (DO NOT MODIFY !)
+F (.\src\delay.c)(0x5892A958)(-c --cpu Cortex-M0+ -D__EVAL -g -O1 --apcs=interwork --split_sections -I .\inc-I"C:\Users\Smitty\Dropbox\ncsu\ECE 461\Project 1\Project_1_Light_Not_Working\RTE"-I"C:\Users\Smitty\Dropbox\ncsu\ECE 461\Project 1\Project_1_Light_Not_Working\RTE\Device\MKL25Z128xxx4"-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\Kinetis_KLxx_DFP\1.11.0\Device\Include-D__UVISION_VERSION="521" -D_RTE_ -DMKL25Z128xxx4-o .\objects\delay.o --omf_browse .\objects\delay.crf --depend .\objects\delay.d)
+I (C:\Keil_v5\ARM\PACK\Keil\Kinetis_KLxx_DFP\1.11.0\Device\Include\MKL25Z4.H)(0x5644C55A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x574EE6E6)
+I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include\core_cm0plus.h)(0x5825F0AE)
+I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include\cmsis_compiler.h)(0x5825F0AE)
+I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include\cmsis_armcc.h)(0x5825F0AE)
+I (C:\Users\Smitty\Dropbox\ncsu\ECE 461\Project 1\Project_1_Light_Not_Working\RTE\Device\MKL25Z128xxx4\system_MKL25Z4.h)(0x588CBDCC)
+F (.\src\LEDs.c)(0x588CBDCC)(-c --cpu Cortex-M0+ -D__EVAL -g -O1 --apcs=interwork --split_sections -I .\inc-I"C:\Users\Smitty\Dropbox\ncsu\ECE 461\Project 1\Project_1_Light_Not_Working\RTE"-I"C:\Users\Smitty\Dropbox\ncsu\ECE 461\Project 1\Project_1_Light_Not_Working\RTE\Device\MKL25Z128xxx4"-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\Kinetis_KLxx_DFP\1.11.0\Device\Include-D__UVISION_VERSION="521" -D_RTE_ -DMKL25Z128xxx4-o .\objects\leds.o --omf_browse .\objects\leds.crf --depend .\objects\leds.d)
+I (C:\Keil_v5\ARM\PACK\Keil\Kinetis_KLxx_DFP\1.11.0\Device\Include\MKL25Z4.H)(0x5644C55A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x574EE6E6)
+I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include\core_cm0plus.h)(0x5825F0AE)
+I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include\cmsis_compiler.h)(0x5825F0AE)
+I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include\cmsis_armcc.h)(0x5825F0AE)
+I (C:\Users\Smitty\Dropbox\ncsu\ECE 461\Project 1\Project_1_Light_Not_Working\RTE\Device\MKL25Z128xxx4\system_MKL25Z4.h)(0x588CBDCC)
+I (.\inc\LEDs.h)(0x588CBDCC)
+I (.\inc\gpio_defs.h)(0x5898B7E5)
+F (.\src\main.c)(0x5898D8F5)(-c --cpu Cortex-M0+ -D__EVAL -g -O1 --apcs=interwork --split_sections -I .\inc-I"C:\Users\Smitty\Dropbox\ncsu\ECE 461\Project 1\Project_1_Light_Not_Working\RTE"-I"C:\Users\Smitty\Dropbox\ncsu\ECE 461\Project 1\Project_1_Light_Not_Working\RTE\Device\MKL25Z128xxx4"-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\Kinetis_KLxx_DFP\1.11.0\Device\Include-D__UVISION_VERSION="521" -D_RTE_ -DMKL25Z128xxx4-o .\objects\main.o --omf_browse .\objects\main.crf --depend .\objects\main.d)
+I (C:\Keil_v5\ARM\PACK\Keil\Kinetis_KLxx_DFP\1.11.0\Device\Include\MKL25Z4.H)(0x5644C55A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x574EE6E6)
+I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include\core_cm0plus.h)(0x5825F0AE)
+I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include\cmsis_compiler.h)(0x5825F0AE)
+I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include\cmsis_armcc.h)(0x5825F0AE)
+I (C:\Users\Smitty\Dropbox\ncsu\ECE 461\Project 1\Project_1_Light_Not_Working\RTE\Device\MKL25Z128xxx4\system_MKL25Z4.h)(0x588CBDCC)
+I (C:\Keil_v5\ARM\ARMCC\include\stdio.h)(0x574EE6E6)
+I (C:\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x574EE6E6)
+I (C:\Keil_v5\ARM\ARMCC\include\math.h)(0x574EE6E6)
+I (C:\Keil_v5\ARM\ARMCC\include\string.h)(0x574EE6E6)
+I (.\inc\gpio_defs.h)(0x5898B7E5)
+I (.\inc\LEDs.h)(0x588CBDCC)
+I (.\inc\i2c.h)(0x5898DAA6)
+I (.\inc\mma8451.h)(0x5893D330)
+I (.\inc\delay.h)(0x588CBDCC)
+F (.\src\mma8451.c)(0x5898F0CC)(-c --cpu Cortex-M0+ -D__EVAL -g -O1 --apcs=interwork --split_sections -I .\inc-I"C:\Users\Smitty\Dropbox\ncsu\ECE 461\Project 1\Project_1_Light_Not_Working\RTE"-I"C:\Users\Smitty\Dropbox\ncsu\ECE 461\Project 1\Project_1_Light_Not_Working\RTE\Device\MKL25Z128xxx4"-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\Kinetis_KLxx_DFP\1.11.0\Device\Include-D__UVISION_VERSION="521" -D_RTE_ -DMKL25Z128xxx4-o .\objects\mma8451.o --omf_browse .\objects\mma8451.crf --depend .\objects\mma8451.d)
+I (C:\Keil_v5\ARM\PACK\Keil\Kinetis_KLxx_DFP\1.11.0\Device\Include\MKL25Z4.H)(0x5644C55A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x574EE6E6)
+I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include\core_cm0plus.h)(0x5825F0AE)
+I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include\cmsis_compiler.h)(0x5825F0AE)
+I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include\cmsis_armcc.h)(0x5825F0AE)
+I (C:\Users\Smitty\Dropbox\ncsu\ECE 461\Project 1\Project_1_Light_Not_Working\RTE\Device\MKL25Z128xxx4\system_MKL25Z4.h)(0x588CBDCC)
+I (.\inc\mma8451.h)(0x5893D330)
+I (.\inc\gpio_defs.h)(0x5898B7E5)
+I (.\inc\i2c.h)(0x5898DAA6)
+I (.\inc\delay.h)(0x588CBDCC)
+F (.\src\i2c_p1.c)(0x5898DDFB)(-c --cpu Cortex-M0+ -D__EVAL -g -O1 --apcs=interwork --split_sections -I .\inc-I"C:\Users\Smitty\Dropbox\ncsu\ECE 461\Project 1\Project_1_Light_Not_Working\RTE"-I"C:\Users\Smitty\Dropbox\ncsu\ECE 461\Project 1\Project_1_Light_Not_Working\RTE\Device\MKL25Z128xxx4"-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\Kinetis_KLxx_DFP\1.11.0\Device\Include-D__UVISION_VERSION="521" -D_RTE_ -DMKL25Z128xxx4-o .\objects\i2c_p1.o --omf_browse .\objects\i2c_p1.crf --depend .\objects\i2c_p1.d)
+I (C:\Keil_v5\ARM\PACK\Keil\Kinetis_KLxx_DFP\1.11.0\Device\Include\MKL25Z4.H)(0x5644C55A)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x574EE6E6)
+I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include\core_cm0plus.h)(0x5825F0AE)
+I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include\cmsis_compiler.h)(0x5825F0AE)
+I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include\cmsis_armcc.h)(0x5825F0AE)
+I (C:\Users\Smitty\Dropbox\ncsu\ECE 461\Project 1\Project_1_Light_Not_Working\RTE\Device\MKL25Z128xxx4\system_MKL25Z4.h)(0x588CBDCC)
+I (.\inc\i2c.h)(0x5898DAA6)
+I (.\inc\gpio_defs.h)(0x5898B7E5)
+I (.\inc\mma8451.h)(0x5893D330)
+F (RTE\Device\MKL25Z128xxx4\startup_MKL25Z4.s)(0x588CBDCC)(--cpu Cortex-M0+ --pd "__EVAL SETA 1" -g --apcs=interwork -I"C:\Users\Smitty\Dropbox\ncsu\ECE 461\Project 1\Project_1_Light_Not_Working\RTE"-I"C:\Users\Smitty\Dropbox\ncsu\ECE 461\Project 1\Project_1_Light_Not_Working\RTE\Device\MKL25Z128xxx4"-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\Kinetis_KLxx_DFP\1.11.0\Device\Include--pd "__UVISION_VERSION SETA 521" --pd "_RTE_ SETA 1" --pd "MKL25Z128xxx4 SETA 1"-o .\objects\startup_mkl25z4.o --depend .\objects\startup_mkl25z4.d)
+F (RTE\Device\MKL25Z128xxx4\system_MKL25Z4.c)(0x588CBDCC)(-c --cpu Cortex-M0+ -D__EVAL -g -O1 --apcs=interwork --split_sections -I .\inc-I"C:\Users\Smitty\Dropbox\ncsu\ECE 461\Project 1\Project_1_Light_Not_Working\RTE"-I"C:\Users\Smitty\Dropbox\ncsu\ECE 461\Project 1\Project_1_Light_Not_Working\RTE\Device\MKL25Z128xxx4"-IC:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include-IC:\Keil_v5\ARM\PACK\Keil\Kinetis_KLxx_DFP\1.11.0\Device\Include-D__UVISION_VERSION="521" -D_RTE_ -DMKL25Z128xxx4-o .\objects\system_mkl25z4.o --omf_browse .\objects\system_mkl25z4.crf --depend .\objects\system_mkl25z4.d)
+I (C:\Keil_v5\ARM\ARMCC\include\stdint.h)(0x574EE6E6)
+I (C:\Keil_v5\ARM\PACK\Keil\Kinetis_KLxx_DFP\1.11.0\Device\Include\MKL25Z4.h)(0x5644C55A)
+I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include\core_cm0plus.h)(0x5825F0AE)
+I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include\cmsis_compiler.h)(0x5825F0AE)
+I (C:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include\cmsis_armcc.h)(0x5825F0AE)
+I (C:\Users\Smitty\Dropbox\ncsu\ECE 461\Project 1\Project_1_Light_Not_Working\RTE\Device\MKL25Z128xxx4\system_MKL25Z4.h)(0x588CBDCC)
+F (RTE\Device\MKL25Z128xxx4\system_MKL25Z4.h)(0x588CBDCC)()
